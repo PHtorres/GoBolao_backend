@@ -1,2 +1,2 @@
-# GoBolao_backend
+# GoBolao
  API da aplicaçao GoBolao
