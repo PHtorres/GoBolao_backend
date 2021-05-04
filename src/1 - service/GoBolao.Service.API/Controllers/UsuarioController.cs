@@ -4,10 +4,7 @@ using GoBolao.Domain.Usuarios.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 
 namespace GoBolao.Service.API.Controllers
@@ -39,6 +36,7 @@ namespace GoBolao.Service.API.Controllers
 
 
         [HttpPost]
+        [AllowAnonymous]
         public ActionResult<Resposta<UsuarioDTO>> Post([FromBody] CriarUsuarioDTO criarUsuarioDTO)
         {
             return Ok(ServicoUsuario.CriarUsuario(criarUsuarioDTO));

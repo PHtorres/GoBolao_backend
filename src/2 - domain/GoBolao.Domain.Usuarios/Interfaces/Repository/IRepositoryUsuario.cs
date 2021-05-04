@@ -5,6 +5,6 @@ namespace GoBolao.Domain.Usuarios.Interfaces.Repository
 {
     public interface IRepositoryUsuario:IRepositoryGenerico<Usuario>
     {
-
+        Usuario ObterUsuarioPorEmail(string email);
     }
 }

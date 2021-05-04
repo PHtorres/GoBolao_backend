@@ -4,6 +4,7 @@ using GoBolao.Infra.Data.Contextos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GoBolao.Infra.Data.Repository
@@ -17,6 +18,12 @@ namespace GoBolao.Infra.Data.Repository
         {
             Sql = _sql;
             DbSetUsuario = Sql.Set<Usuario>();
+        }
+
+        public Usuario ObterUsuarioPorEmail(string email)
+        {
+            var usuario = DbSetUsuario.Where(item => item.Email == email).FirstOrDefault();
+            return usuario;
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using GoBolao.Domain.Shared.DomainObjects;
+using GoBolao.Domain.Shared.Interfaces.Service;
 using GoBolao.Domain.Usuarios.DTO;
 using GoBolao.Domain.Usuarios.Entidades;
 using GoBolao.Domain.Usuarios.Interfaces.Repository;
@@ -14,12 +15,14 @@ namespace GoBolao.Domain.Usuarios.Services
     public class ServiceUsuario : IServiceUsuario
     {
         private readonly IRepositoryUsuario RepositorioUsuario;
+        private readonly IServiceCriptografia Criptografia;
         private Resposta<UsuarioDTO> Resposta;
 
-        public ServiceUsuario(IRepositoryUsuario repositorioUsuario)
+        public ServiceUsuario(IRepositoryUsuario repositorioUsuario, IServiceCriptografia criptografia)
         {
             RepositorioUsuario = repositorioUsuario;
             Resposta = new Resposta<UsuarioDTO>();
+            Criptografia = criptografia;
         }
 
         public Resposta<UsuarioDTO> AlterarUsuario(AlterarUsuarioDTO alterarUsuarioDTO, int idUsuarioAcao)
@@ -51,6 +54,7 @@ namespace GoBolao.Domain.Usuarios.Services
                 return Resposta;
             }
 
+            usuario.AlterarSenha(Criptografia.Criptografar(criarUsuarioDTO.Senha));
             RepositorioUsuario.Adicionar(usuario);
             RepositorioUsuario.Salvar();
 
