@@ -15,6 +15,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\2 - domain\GoBolao.Domain.Core\GoBolao.Domain.Core.csproj" />
     <ProjectReference Include="..\..\2 - domain\GoBolao.Domain.Usuarios\GoBolao.Domain.Usuarios.csproj" />
   </ItemGroup>
 

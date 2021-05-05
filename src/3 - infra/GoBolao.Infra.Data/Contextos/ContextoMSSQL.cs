@@ -8,6 +8,7 @@ namespace GoBolao.Infra.Data.Contextos
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UsuarioMapping());
+            builder.ApplyConfiguration(new CampeonatoMapping());
             base.OnModelCreating(builder);
         }
 
