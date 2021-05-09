@@ -10,7 +10,7 @@ namespace GoBolao.Domain.Usuarios.ManualMapper
     {
         public static UsuarioDTO UsuarioParaDTO(this Usuario usuario)
         {
-            return new UsuarioDTO { Apelido = usuario.Apelido, Email = usuario.Email, Id = usuario.Id, UrlAvatar = usuario.UrlAvatar };
+            return new UsuarioDTO { Apelido = usuario.Apelido, Email = usuario.Email, Id = usuario.Id, NomeImagemAvatar = usuario.NomeImagemAvatar };
         }
     }
 }

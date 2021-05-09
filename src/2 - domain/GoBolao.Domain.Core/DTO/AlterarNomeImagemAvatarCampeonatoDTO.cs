@@ -4,9 +4,9 @@ using System.Text;
 
 namespace GoBolao.Domain.Core.DTO
 {
-    public class AlterarUrlAvatarCampeonatoDTO
+    public class AlterarNomeImagemAvatarCampeonatoDTO
     {
         public int IdCampeonato { get; set; }
-        public string UrlAvatar { get; set; }
+        public string NomeImagemAvatar { get; set; }
     }
 }

@@ -11,6 +11,7 @@ CREATE TABLE [dbo].[BOLAO](
 	[IdCriador] [int] NOT NULL,
 	[IdCampeonato] [int] NOT NULL,
 	[Privacidade] [int] NOT NULL,
+	[NomeImagemAvatar] [varchar](200) NULL,
  CONSTRAINT [PK_BOLAO] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

@@ -8,16 +8,16 @@ namespace GoBolao.Domain.Core.Entidades
         public Campeonato(string nome)
         {
             Nome = nome;
-            UrlAvatar = "";
+            NomeImagemAvatar = "";
         }
 
         public string Nome { get; private set; }
-        public string UrlAvatar { get; private set; }
+        public string NomeImagemAvatar { get; private set; }
 
         public void Validar()
         {
             ValidarNome();
-            ValidarUrlAvatar();
+            ValidarNomeImagemAvatar();
         }
 
         public void AlterarNome(string nome)
@@ -26,10 +26,10 @@ namespace GoBolao.Domain.Core.Entidades
             ValidarNome();
         }
 
-        public void AlterarUrlAvatar(string urlAvatar)
+        public void AlterarNomeImagemAvatar(string nomeImagemAvatar)
         {
-            UrlAvatar = urlAvatar;
-            ValidarUrlAvatar();
+            NomeImagemAvatar = nomeImagemAvatar;
+            ValidarNomeImagemAvatar();
         }
 
         private void ValidarNome()
@@ -39,9 +39,9 @@ namespace GoBolao.Domain.Core.Entidades
             NaoDeveSerMenorQue(4, Nome, "Nome deve ter, pelo menos, 4 caracteres.");
         }
 
-        private void ValidarUrlAvatar()
+        private void ValidarNomeImagemAvatar()
         {
-            NaoDeveSerMaiorQue(100, UrlAvatar, "Url do avatar deve ter, no máximo, 100 caracteres.");
+            NaoDeveSerMaiorQue(200, NomeImagemAvatar, "Url do avatar deve ter, no máximo, 200 caracteres.");
         }
     }
 }

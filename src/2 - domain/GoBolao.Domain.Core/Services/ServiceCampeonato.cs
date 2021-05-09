@@ -35,10 +35,10 @@ namespace GoBolao.Domain.Core.Services
             return Resposta;
         }
 
-        public Resposta<Campeonato> AlterarUrlAvatar(AlterarUrlAvatarCampeonatoDTO alterarUrlAvatarCampeonatoDTO)
+        public Resposta<Campeonato> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarCampeonatoDTO alterarUrlAvatarCampeonatoDTO)
         {
             var campeonato = RepositorioCampeonato.Obter(alterarUrlAvatarCampeonatoDTO.IdCampeonato);
-            campeonato.AlterarUrlAvatar(alterarUrlAvatarCampeonatoDTO.UrlAvatar);
+            campeonato.AlterarNomeImagemAvatar(alterarUrlAvatarCampeonatoDTO.NomeImagemAvatar);
 
             if (campeonato.Invalido)
             {

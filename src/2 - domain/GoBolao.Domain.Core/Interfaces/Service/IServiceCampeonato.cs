@@ -9,7 +9,7 @@ namespace GoBolao.Domain.Core.Interfaces.Service
     public interface IServiceCampeonato:IDisposable
     {
         Resposta<Campeonato> CriarCampeonato(CriarCampeonatoDTO criarcampeonatodto);
-        Resposta<Campeonato> AlterarUrlAvatar(AlterarUrlAvatarCampeonatoDTO alterarUrlAvatarCampeonatoDTO);
+        Resposta<Campeonato> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarCampeonatoDTO alterarNomeImagemAvatarCampeonatoDTO);
         Resposta<IEnumerable<Campeonato>> ObterCampeonatos();
     }
 }

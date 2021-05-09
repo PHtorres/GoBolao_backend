@@ -46,6 +46,14 @@ namespace GoBolao.Domain.Shared.DomainObjects
             }
         }
 
+        protected void NaoDeveSerZeroOuMenos(int obj, string mensagemErro)
+        {
+            if (obj.MenorQue(1))
+            {
+                AdicionarErro(mensagemErro);
+            }
+        }
+
         protected void DeveSerMenorQue(int minimo, string obj, string mensagemErro)
         {
             if (!obj.MenorQue(minimo))

@@ -1,5 +1,5 @@
 ﻿using GoBolao.Domain.Core.Entidades;
-using GoBolao.Domain.Core.Interfaces;
+using GoBolao.Domain.Core.Interfaces.Repository;
 using GoBolao.Infra.Data.Contextos;
 
 namespace GoBolao.Infra.Data.Repository

@@ -105,5 +105,22 @@ namespace GoBolao.Domain.Usuarios.Services
 
             return Resposta;
         }
+
+        public Resposta<UsuarioDTO> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarDTO alterarNomeImagemAvatarDTO, int idUsuarioAcao)
+        {
+            var usuario = RepositorioUsuario.Obter(alterarNomeImagemAvatarDTO.IdUsuario);
+            usuario.AlterarNomeImagemAvatar(alterarNomeImagemAvatarDTO.NomeImagemAvatar);
+            if (usuario.Invalido)
+            {
+                Resposta.AdicionarNotificacao(usuario._Erros);
+                return Resposta;
+            }
+
+            RepositorioUsuario.Atualizar(usuario);
+            RepositorioUsuario.Salvar();
+
+            Resposta.AdicionarConteudo(usuario.UsuarioParaDTO());
+            return Resposta;
+        }
     }
 }

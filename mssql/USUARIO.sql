@@ -10,7 +10,7 @@ CREATE TABLE [dbo].[USUARIO](
 	[Apelido] [varchar](30) NOT NULL,
 	[Email] [varchar](50) NOT NULL,
 	[Senha] [varchar](300) NOT NULL,
-	[UrlAvatar] [varchar](100) NOT NULL,
+	[NomeImagemAvatar] [varchar](200) NOT NULL,
  CONSTRAINT [PK_USUARIO] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC

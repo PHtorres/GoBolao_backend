@@ -9,6 +9,7 @@ namespace GoBolao.Infra.Data.Contextos
         {
             builder.ApplyConfiguration(new UsuarioMapping());
             builder.ApplyConfiguration(new CampeonatoMapping());
+            builder.ApplyConfiguration(new BolaoMapping());
             base.OnModelCreating(builder);
         }
 

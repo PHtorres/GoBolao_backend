@@ -67,6 +67,7 @@ namespace GoBolao.Service.API
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             SwaggerStartup.AplicacaoSwagger(app);
 
             app.UseAdicionarUsuario();

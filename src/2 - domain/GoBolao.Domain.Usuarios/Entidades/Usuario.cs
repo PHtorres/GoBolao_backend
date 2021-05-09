@@ -10,21 +10,21 @@ namespace GoBolao.Domain.Usuarios.Entidades
             Apelido = apelido;
             Email = email;
             Senha = senha;
-            UrlAvatar = "";
+            NomeImagemAvatar = "";
             Validar();
         }
 
         public string Apelido { get; private set; }
 		public string Email { get; private set; }
 		public string Senha { get; private set; }
-		public string UrlAvatar { get; private set; }
+		public string NomeImagemAvatar { get; private set; }
 
         public void Validar()
         {
             ValidarApelido();
             ValidarEmail();
             ValidarSenha();
-            ValidarUrlAvatar();
+            ValidarNomeImagemAvatar();
         }
 
         public void AlterarApelido(string apelido)
@@ -45,10 +45,10 @@ namespace GoBolao.Domain.Usuarios.Entidades
             ValidarSenha();
         }
 
-        public void AlterarUrlAvatar(string urlAvatar)
+        public void AlterarNomeImagemAvatar(string nomeImagemAvatar)
         {
-            UrlAvatar = urlAvatar;
-            ValidarUrlAvatar();
+            NomeImagemAvatar = nomeImagemAvatar;
+            ValidarNomeImagemAvatar();
         }
 
         private void ValidarApelido()
@@ -69,9 +69,9 @@ namespace GoBolao.Domain.Usuarios.Entidades
             NaoDeveSerMenorQue(5, Senha, "A senha deve conter, pelo menos, 5 caracteres");
         }
 
-        private void ValidarUrlAvatar()
+        private void ValidarNomeImagemAvatar()
         {
-            NaoDeveSerMaiorQue(100, UrlAvatar, "Url do avatar muito grande.");
+            NaoDeveSerMaiorQue(200, NomeImagemAvatar, "Nome da imagem do avatar muito grande.");
         }
     }
 }

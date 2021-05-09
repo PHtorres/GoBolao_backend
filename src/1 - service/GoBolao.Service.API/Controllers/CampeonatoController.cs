@@ -1,4 +1,6 @@
-﻿using GoBolao.Domain.Core.Interfaces.Service;
+﻿using GoBolao.Domain.Core.DTO;
+using GoBolao.Domain.Core.Entidades;
+using GoBolao.Domain.Core.Interfaces.Service;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,34 +25,23 @@ namespace GoBolao.Service.API.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<string> Get()
+        public ActionResult<IEnumerable<Campeonato>> Get()
         {
-            return new string[] { "value1", "value2" };
+            return Ok(ServicoCampeonato.ObterCampeonatos());
         }
 
-        // GET api/<CampeonatoController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
 
-        // POST api/<CampeonatoController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Campeonato> Post([FromBody] CriarCampeonatoDTO criarCampeonatoDTO)
         {
+            return Ok(ServicoCampeonato.CriarCampeonato(criarCampeonatoDTO));
         }
 
-        // PUT api/<CampeonatoController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPatch]
+        [Route("avatar")]
+        public ActionResult<Campeonato> Patch([FromBody] AlterarNomeImagemAvatarCampeonatoDTO alterarNomeImagemAvatarCampeonatoDTO)
         {
-        }
-
-        // DELETE api/<CampeonatoController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            return Ok(ServicoCampeonato.AlterarNomeImagemAvatar(alterarNomeImagemAvatarCampeonatoDTO));
         }
     }
 }

@@ -8,7 +8,7 @@ GO
 CREATE TABLE [dbo].[CAMPEONATO](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Nome] [varchar](50) NOT NULL,
-	[UrlAvatar] [varchar](100) NULL,
+	[NomeImagemAvatar] [varchar](200) NULL,
  CONSTRAINT [PK_CAMPEONATO] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
