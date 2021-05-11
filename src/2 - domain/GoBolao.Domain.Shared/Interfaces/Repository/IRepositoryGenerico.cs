@@ -8,6 +8,7 @@ namespace GoBolao.Domain.Shared.Interfaces.Repository
     {
         void Adicionar(EntidadeGenerica obj);
         void Atualizar(EntidadeGenerica obj);
+        void AtualizarLista(IEnumerable<EntidadeGenerica> listaObj);
         IEnumerable<EntidadeGenerica> Listar();
         EntidadeGenerica Obter(int id);
         void Remover(EntidadeGenerica obj);

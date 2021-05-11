@@ -1,23 +1,21 @@
-/****** Object:  Table [dbo].[APOSTA]    Script Date: 09/03/2020 12:19:03 ******/
 SET ANSI_NULLS ON
 GO
 
 SET QUOTED_IDENTIFIER ON
 GO
 
-CREATE TABLE [dbo].[APOSTA](
+CREATE TABLE [dbo].[PALPITE](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[Status] [int] NOT NULL,
 	[IdJogo] [int] NOT NULL,
 	[IdUsuario] [int] NOT NULL,
 	[DataHora] [datetime] NOT NULL,
-	[PlacarMandanteApostado] [int] NOT NULL,
-	[PlacarVisitanteApostado] [int] NOT NULL,
+	[PlacarMandantePalpite] [int] NOT NULL,
+	[PlacarVisitantePalpite] [int] NOT NULL,
 	[PlacarMandanteReal] [int] NULL,
 	[PlacarVisitanteReal] [int] NULL,
-	[ResultadoApostado] [varchar](10) NOT NULL,
-	[ResultadoReal] [varchar](10) NULL,
 	[Pontos] [int] NOT NULL,
+	[Finalizado] [bit] NOT NULL,
  CONSTRAINT [PK_APOSTA] PRIMARY KEY CLUSTERED 
 (
 	[ID] ASC
@@ -25,18 +23,18 @@ CREATE TABLE [dbo].[APOSTA](
 ) ON [PRIMARY]
 GO
 
-ALTER TABLE [dbo].[APOSTA]  WITH CHECK ADD  CONSTRAINT [FK_APOSTA_USUARIO] FOREIGN KEY([IdUsuario])
+ALTER TABLE [dbo].[PALPITE]  WITH CHECK ADD  CONSTRAINT [FK_PALPITE_USUARIO] FOREIGN KEY([IdUsuario])
 REFERENCES [dbo].[USUARIO] ([Id])
 GO
 
-ALTER TABLE [dbo].[APOSTA] CHECK CONSTRAINT [FK_APOSTA_USUARIO]
+ALTER TABLE [dbo].[PALPITE] CHECK CONSTRAINT [FK_PALPITE_USUARIO]
 GO
 
 
-ALTER TABLE [dbo].[APOSTA]  WITH CHECK ADD  CONSTRAINT [FK_APOSTA_JOGO] FOREIGN KEY([IdJogo])
+ALTER TABLE [dbo].[PALPITE]  WITH CHECK ADD  CONSTRAINT [FK_PALPITE_JOGO] FOREIGN KEY([IdJogo])
 REFERENCES [dbo].[JOGO] ([Id])
 GO
 
-ALTER TABLE [dbo].[APOSTA] CHECK CONSTRAINT [FK_APOSTA_JOGO]
+ALTER TABLE [dbo].[PALPITE] CHECK CONSTRAINT [FK_PALPITE_JOGO]
 GO
 

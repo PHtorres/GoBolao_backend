@@ -78,6 +78,14 @@ namespace GoBolao.Domain.Shared.DomainObjects
             }
         }
 
+        protected void NaoDeveSerMenorQue(DateTime minimo, DateTime obj, string mensagemErro)
+        {
+            if (obj.MenorQue(minimo))
+            {
+                AdicionarErro(mensagemErro);
+            }
+        }
+
         protected void NaoDeveSerMaiorQue(int maximo, string obj, string mensagemErro)
         {
             if (obj.MaiorQue(maximo))
@@ -125,6 +133,14 @@ namespace GoBolao.Domain.Shared.DomainObjects
                 var mailAddress = new MailAddress(email);
             }
             catch
+            {
+                AdicionarErro(mensagemErro);
+            }
+        }
+
+        protected void NaoDeveSerNulo(object obj, string mensagemErro)
+        {
+            if (obj == null)
             {
                 AdicionarErro(mensagemErro);
             }

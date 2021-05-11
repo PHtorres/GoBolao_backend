@@ -30,5 +30,10 @@ namespace GoBolao.Domain.Shared.DomainObjects
         {
             return obj < minimo;
         }
+
+        public static bool MenorQue(this DateTime obj, DateTime minimo)
+        {
+            return obj < minimo;
+        }
     }
 }
