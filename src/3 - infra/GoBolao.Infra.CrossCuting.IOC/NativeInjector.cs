@@ -16,7 +16,6 @@ namespace GoBolao.Infra.CrossCuting.IOC
     {
         public static void ResolverDependencias(IServiceCollection service)
         {
-
             service.AddScoped<ContextoMSSQL>();
             service.AddScoped<IRepositoryUsuario, RepositoryUsuario>();
             service.AddScoped<IServiceUsuario, ServiceUsuario>();
@@ -26,6 +25,12 @@ namespace GoBolao.Infra.CrossCuting.IOC
             service.AddScoped<IServiceCampeonato, ServiceCampeonato>();
             service.AddScoped<IRepositoryBolao, RepositoryBolao>();
             service.AddScoped<IServiceBolao, ServiceBolao>();
+            service.AddScoped<IRepositoryJogo, RepositoryJogo>();
+            service.AddScoped<IServiceJogo, ServiceJogo>();
+            service.AddScoped<IRepositoryPalpite, RepositoryPalpite>();
+            service.AddScoped<IServicePalpite, ServicePalpite>();
+            service.AddScoped<IRepositoryTime, RepositoryTime>();
+            service.AddScoped<IServiceTime, ServiceTime>();
         }
     }
 }

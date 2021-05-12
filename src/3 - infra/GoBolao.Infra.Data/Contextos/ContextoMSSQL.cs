@@ -10,6 +10,9 @@ namespace GoBolao.Infra.Data.Contextos
             builder.ApplyConfiguration(new UsuarioMapping());
             builder.ApplyConfiguration(new CampeonatoMapping());
             builder.ApplyConfiguration(new BolaoMapping());
+            builder.ApplyConfiguration(new JogoMapping());
+            builder.ApplyConfiguration(new PalpiteMapping());
+            builder.ApplyConfiguration(new TimeMapping());
             base.OnModelCreating(builder);
         }
 

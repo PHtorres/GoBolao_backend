@@ -1,50 +1,141 @@
 ﻿using GoBolao.Domain.Core.DTO;
 using GoBolao.Domain.Core.Entidades;
+using GoBolao.Domain.Core.Interfaces.Repository;
 using GoBolao.Domain.Core.Interfaces.Service;
+using GoBolao.Domain.Core.ValueObjects;
 using GoBolao.Domain.Shared.DomainObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GoBolao.Domain.Core.Services
 {
     public class ServiceJogo : IServiceJogo
     {
+        private readonly IRepositoryJogo RepositorioJogo;
+        private readonly IRepositoryPalpite RepositorioPalpite;
+        private Resposta<Jogo> Resposta;
+        private Resposta<IEnumerable<JogoDTO>> RespostaListaDTO;
+
+        public ServiceJogo(IRepositoryJogo repositorioJogo, IRepositoryPalpite repositorioPalpite)
+        {
+            RepositorioJogo = repositorioJogo;
+            Resposta = new Resposta<Jogo>();
+            RespostaListaDTO = new Resposta<IEnumerable<JogoDTO>>();
+            RepositorioPalpite = repositorioPalpite;
+        }
+
         public Resposta<Jogo> CriarJogo(CriarJogoDTO criarJogoDTO)
         {
-            throw new NotImplementedException();
+            var jogo = new Jogo(criarJogoDTO.IdCampeonato, criarJogoDTO.DataHora, criarJogoDTO.IdMandante, criarJogoDTO.IdVisitante, criarJogoDTO.Fase);
+            if (jogo.Invalido)
+            {
+                Resposta.AdicionarNotificacao(jogo._Erros);
+                return Resposta;
+            }
+
+            RepositorioJogo.Adicionar(jogo);
+            RepositorioJogo.Salvar();
+
+            Resposta.AdicionarConteudo(jogo);
+            return Resposta;
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            RepositorioJogo.Dispose();
+            RepositorioPalpite.Dispose();
+            GC.SuppressFinalize(this);
         }
 
         public Resposta<Jogo> FinalizarJogo(FinalizarJogoDTO finalizarJogoDTO)
         {
-            //1 trazer todos os palpites do jogo
-            //2 salvar numa lista os que nao ponturam
-            //3 salvar numa lista os que acertaram o resultado
-            //4 salvar numa lista os que acertaram o placar
-            //5 loop para alterar Pontuacao de cada palpite e status finalizado
-            //6 repositorio updaterange de cada lista
-            //7 alterar status do jogo para finalizado
-            throw new NotImplementedException();
+            var jogo = RepositorioJogo.Obter(finalizarJogoDTO.IdJogo);
+
+            if(jogo == null)
+            {
+                Resposta.AdicionarNotificacao("Jogo inexistente.");
+                return Resposta;
+            }
+
+            var palpitesDoJogo = RepositorioPalpite.ObterPalpitesPorJogo(finalizarJogoDTO.IdJogo);
+
+            var palpitesAcertosPlacar = palpitesDoJogo
+                            .Where(p =>
+                            p.PlacarMandantePalpite == finalizarJogoDTO.PlacarMandante && p.PlacarVisitantePalpite == finalizarJogoDTO.PlacarVisitante
+                            ).AsEnumerable();
+
+            var palpitesAcertosResultado = palpitesDoJogo
+                                           .Where(p =>
+                                           ResultadoPorPlacares(p.PlacarMandantePalpite, p.PlacarVisitantePalpite) == ResultadoPorPlacares(finalizarJogoDTO.PlacarMandante, finalizarJogoDTO.PlacarVisitante)
+                                           && !palpitesAcertosPlacar.Contains(p)
+                                           ).AsEnumerable();
+
+
+
+            foreach(var palpiteAcertosResultado in palpitesAcertosResultado)
+            {
+                palpiteAcertosResultado.AlterarPontos(3);
+                palpiteAcertosResultado.FinalizarPalpite();
+            }
+
+            foreach (var palpiteAcertosPlacar in palpitesAcertosPlacar)
+            {
+                palpiteAcertosPlacar.AlterarPontos(8);
+                palpiteAcertosPlacar.FinalizarPalpite();
+            }
+
+            RepositorioPalpite.AtualizarLista(palpitesAcertosResultado);
+            RepositorioPalpite.AtualizarLista(palpitesAcertosPlacar);
+            RepositorioPalpite.Salvar();
+
+            jogo.AlterarPlacarMandante(finalizarJogoDTO.PlacarMandante);
+            jogo.AlterarPlacarVisitante(finalizarJogoDTO.PlacarVisitante);
+            jogo.AlterarStatusParaFinalizado();
+
+            RepositorioJogo.Atualizar(jogo);
+            RepositorioJogo.Salvar();
+
+            Resposta.AdicionarConteudo(jogo);
+            return Resposta;
+
         }
 
         public Resposta<IEnumerable<JogoDTO>> ObterJogos(int idUsuario)
         {
-            throw new NotImplementedException();
+            var jogos = RepositorioJogo.ObterJogos(idUsuario);
+            RespostaListaDTO.AdicionarConteudo(jogos);
+            return RespostaListaDTO;
         }
 
         public Resposta<IEnumerable<JogoDTO>> ObterJogosDeAmanha(int idUsuario)
         {
-            throw new NotImplementedException();
+            var jogos = RepositorioJogo.ObterJogosNaData(DateTime.Now.AddDays(1), idUsuario);
+            RespostaListaDTO.AdicionarConteudo(jogos);
+            return RespostaListaDTO;
         }
 
         public Resposta<IEnumerable<JogoDTO>> ObterJogosDeHoje(int idUsuario)
         {
-            throw new NotImplementedException();
+            var jogos = RepositorioJogo.ObterJogosNaData(DateTime.Now, idUsuario);
+            RespostaListaDTO.AdicionarConteudo(jogos);
+            return RespostaListaDTO;
+        }
+
+        private Resultado ResultadoPorPlacares(int placarMandante, int placarVisitante)
+        {
+            if(placarMandante > placarVisitante)
+            {
+                return Resultado.VitoriaMandante;
+            }
+
+            if(placarVisitante > placarMandante)
+            {
+                return Resultado.VitoriaVisitante;
+            }
+
+            return Resultado.Empate;
         }
     }
 }

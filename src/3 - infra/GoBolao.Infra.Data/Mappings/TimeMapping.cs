@@ -4,12 +4,12 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace GoBolao.Infra.Data.Mappings
 {
-    public class BolaoMapping : IEntityTypeConfiguration<Bolao>
+    public class TimeMapping : IEntityTypeConfiguration<Time>
     {
-        public void Configure(EntityTypeBuilder<Bolao> builder)
+        public void Configure(EntityTypeBuilder<Time> builder)
         {
             builder.HasKey(u => u.Id);
-            builder.ToTable("bolao");
+            builder.ToTable("time");
         }
     }
 }

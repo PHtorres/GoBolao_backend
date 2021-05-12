@@ -6,14 +6,11 @@ GO
 
 CREATE TABLE [dbo].[PALPITE](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
-	[Status] [int] NOT NULL,
 	[IdJogo] [int] NOT NULL,
 	[IdUsuario] [int] NOT NULL,
 	[DataHora] [datetime] NOT NULL,
 	[PlacarMandantePalpite] [int] NOT NULL,
 	[PlacarVisitantePalpite] [int] NOT NULL,
-	[PlacarMandanteReal] [int] NULL,
-	[PlacarVisitanteReal] [int] NULL,
 	[Pontos] [int] NOT NULL,
 	[Finalizado] [bit] NOT NULL,
  CONSTRAINT [PK_APOSTA] PRIMARY KEY CLUSTERED 
