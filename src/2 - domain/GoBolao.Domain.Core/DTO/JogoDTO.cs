@@ -6,6 +6,7 @@ namespace GoBolao.Domain.Core.DTO
 {
     public class JogoDTO
     {
+		public int Id { get; set; }
 		public string NomeCampeonato { get; set; }
 		public DateTime DataHora { get; set; }
 		public string Mandante { get; set; }

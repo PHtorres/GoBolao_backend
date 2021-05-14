@@ -11,5 +11,6 @@ namespace GoBolao.Domain.Core.Interfaces.Service
     {
         Resposta<Time> CriarTime(CriarTimeDTO criarTimeDTO);
         Resposta<Time> AlterarTime(AlterarTimeDTO alterarTimeDTO);
+        Resposta<IEnumerable<Time>> ObterTimes();
     }
 }

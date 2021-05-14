@@ -60,5 +60,12 @@ namespace GoBolao.Domain.Core.Services
             RepositorioTime.Dispose();
             GC.SuppressFinalize(this);
         }
+
+        public Resposta<IEnumerable<Time>> ObterTimes()
+        {
+            var respostaLista = new Resposta<IEnumerable<Time>>();
+            respostaLista.AdicionarConteudo(RepositorioTime.Listar());
+            return respostaLista;
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace GoBolao.Infra.Data.Repository
         public IEnumerable<JogoDTO> ObterJogos(int idUsuario)
         {
             var query = @"SELECT 
+                          J.Id,
                           C.Nome NomeCampeonato,
                           j.DataHora,
                           (SELECT Nome from TIME T WHERE T.Id = J.IdMandante) Mandante,
@@ -40,13 +41,14 @@ namespace GoBolao.Infra.Data.Repository
                           WHERE
                           J.IdCampeonato = C.Id";
 
-            var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARRIO = idUsuario });
+            var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARIO = idUsuario });
             return jogos;
         }
 
         public IEnumerable<JogoDTO> ObterJogosNaData(DateTime data, int idUsuario)
         {
-            var query = @"SELECT 
+            var query = @"SELECT
+                          J.Id,
                           C.Nome NomeCampeonato,
                           j.DataHora,
                           (SELECT Nome from TIME T WHERE T.Id = J.IdMandante) Mandante,
@@ -64,7 +66,7 @@ namespace GoBolao.Infra.Data.Repository
                           CONVERT(date, j.DataHora) = @DATA AND
                           J.IdCampeonato = C.Id";
 
-            var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARRIO = idUsuario, DATA = data.Date });
+            var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARIO = idUsuario, DATA = data.Date });
             return jogos;
         }
     }

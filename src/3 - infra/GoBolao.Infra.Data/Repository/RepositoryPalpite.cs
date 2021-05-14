@@ -28,7 +28,8 @@ namespace GoBolao.Infra.Data.Repository
 
         public IEnumerable<PalpiteDTO> ObterPalpitesPorUsuario(int idUsuario)
         {
-            var query = @"SELECT 
+            var query = @"SELECT
+                         p.Id,
                          (SELECT NOME FROM TIME T WHERE T.Id = J.IdMandante) Mandante,
                          (SELECT NOME FROM TIME T WHERE T.Id = J.IdVisitante) Visitante,
                          (SELECT NomeImagemAvatar FROM TIME T WHERE T.Id = J.IdMandante) NomeImagemAvatarMandante,
@@ -36,18 +37,18 @@ namespace GoBolao.Infra.Data.Repository
                          p.DataHora,
                          p.PlacarMandantePalpite,
                          p.PlacarVisitantePalpite,
-                         p.PlacarMandanteReal,
-                         p.PlacarVisitanteReal,
+                         J.PlacarMandante PlacarMandanteReal,
+                         J.PlacarVisitante PlacarVisitanteReal,
                          p.Pontos,
                          p.Finalizado
                          FROM
                          PALPITE P,
                          JOGO J
                          WHERE 
-                         P.IdUsuario = @ID_USUARRIO AND
+                         P.IdUsuario = @ID_USUARIO AND
                          P.IdJogo = J.Id";
 
-            var palpites = Sql.Database.GetDbConnection().Query<PalpiteDTO>(query, new { ID_USUARRIO = idUsuario });
+            var palpites = Sql.Database.GetDbConnection().Query<PalpiteDTO>(query, new { ID_USUARIO = idUsuario });
             return palpites;
         }
     }
