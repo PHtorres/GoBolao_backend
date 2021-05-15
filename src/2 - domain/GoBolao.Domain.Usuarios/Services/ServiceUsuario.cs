@@ -3,6 +3,7 @@ using GoBolao.Domain.Shared.Interfaces.Service;
 using GoBolao.Domain.Usuarios.DTO;
 using GoBolao.Domain.Usuarios.Entidades;
 using GoBolao.Domain.Usuarios.Interfaces.Repository;
+using GoBolao.Domain.Usuarios.Interfaces.Rules;
 using GoBolao.Domain.Usuarios.Interfaces.Service;
 using GoBolao.Domain.Usuarios.ManualMapper;
 using System;
@@ -15,14 +16,16 @@ namespace GoBolao.Domain.Usuarios.Services
     public class ServiceUsuario : IServiceUsuario
     {
         private readonly IRepositoryUsuario RepositorioUsuario;
+        private readonly IRulesUsuario RulesUsuario;
         private readonly IServiceCriptografia Criptografia;
         private Resposta<UsuarioDTO> Resposta;
 
-        public ServiceUsuario(IRepositoryUsuario repositorioUsuario, IServiceCriptografia criptografia)
+        public ServiceUsuario(IRepositoryUsuario repositorioUsuario, IServiceCriptografia criptografia, IRulesUsuario rulesUsuario)
         {
             RepositorioUsuario = repositorioUsuario;
             Resposta = new Resposta<UsuarioDTO>();
             Criptografia = criptografia;
+            RulesUsuario = rulesUsuario;
         }
 
         public Resposta<UsuarioDTO> AlterarUsuario(AlterarUsuarioDTO alterarUsuarioDTO, int idUsuarioAcao)
@@ -34,6 +37,12 @@ namespace GoBolao.Domain.Usuarios.Services
             if (usuario.Invalido)
             {
                 Resposta.AdicionarNotificacao(usuario._Erros);
+                return Resposta;
+            }
+
+            if (!RulesUsuario.AptoParaAlterar(alterarUsuarioDTO))
+            {
+                Resposta.AdicionarNotificacao(RulesUsuario.ObterFalhas());
                 return Resposta;
             }
 
@@ -54,6 +63,12 @@ namespace GoBolao.Domain.Usuarios.Services
                 return Resposta;
             }
 
+            if (!RulesUsuario.AptoParaCriar(criarUsuarioDTO))
+            {
+                Resposta.AdicionarNotificacao(RulesUsuario.ObterFalhas());
+                return Resposta;
+            }
+
             usuario.AlterarSenha(Criptografia.Criptografar(criarUsuarioDTO.Senha));
             RepositorioUsuario.Adicionar(usuario);
             RepositorioUsuario.Salvar();
@@ -65,13 +80,15 @@ namespace GoBolao.Domain.Usuarios.Services
         public void Dispose()
         {
             RepositorioUsuario.Dispose();
+            Criptografia.Dispose();
+            RulesUsuario.Dispose();
             GC.SuppressFinalize(this);
         }
 
         public Resposta<UsuarioDTO> ObterUsuarioPeloId(int IdUsuario)
         {
             var usuario = RepositorioUsuario.Obter(IdUsuario);
-            if(usuario == null)
+            if (usuario == null)
             {
                 Resposta.AdicionarNotificacao("Usuário inexistente.");
                 return Resposta;
