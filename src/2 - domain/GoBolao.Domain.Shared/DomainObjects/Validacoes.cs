@@ -46,6 +46,14 @@ namespace GoBolao.Domain.Shared.DomainObjects
             }
         }
 
+        protected void NaoDeveSerZeroOuMenos(int obj, string mensagemErro)
+        {
+            if (obj.MenorQue(1))
+            {
+                AdicionarErro(mensagemErro);
+            }
+        }
+
         protected void DeveSerMenorQue(int minimo, string obj, string mensagemErro)
         {
             if (!obj.MenorQue(minimo))
@@ -63,6 +71,14 @@ namespace GoBolao.Domain.Shared.DomainObjects
         }
 
         protected void NaoDeveSerMenorQue(int minimo, string obj, string mensagemErro)
+        {
+            if (obj.MenorQue(minimo))
+            {
+                AdicionarErro(mensagemErro);
+            }
+        }
+
+        protected void NaoDeveSerMenorQue(DateTime minimo, DateTime obj, string mensagemErro)
         {
             if (obj.MenorQue(minimo))
             {
@@ -117,6 +133,14 @@ namespace GoBolao.Domain.Shared.DomainObjects
                 var mailAddress = new MailAddress(email);
             }
             catch
+            {
+                AdicionarErro(mensagemErro);
+            }
+        }
+
+        protected void NaoDeveSerNulo(object obj, string mensagemErro)
+        {
+            if (obj == null)
             {
                 AdicionarErro(mensagemErro);
             }

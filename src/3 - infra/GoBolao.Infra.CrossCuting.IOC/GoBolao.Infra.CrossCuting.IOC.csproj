@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\GoBolao.Infra.Criptografia\GoBolao.Infra.Criptografia.csproj" />
     <ProjectReference Include="..\GoBolao.Infra.Data\GoBolao.Infra.Data.csproj" />
   </ItemGroup>
 
