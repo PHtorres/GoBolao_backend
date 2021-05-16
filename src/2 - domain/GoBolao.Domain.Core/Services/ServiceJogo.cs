@@ -1,6 +1,7 @@
 ﻿using GoBolao.Domain.Core.DTO;
 using GoBolao.Domain.Core.Entidades;
 using GoBolao.Domain.Core.Interfaces.Repository;
+using GoBolao.Domain.Core.Interfaces.Rules;
 using GoBolao.Domain.Core.Interfaces.Service;
 using GoBolao.Domain.Core.ValueObjects;
 using GoBolao.Domain.Shared.DomainObjects;
@@ -15,15 +16,17 @@ namespace GoBolao.Domain.Core.Services
     {
         private readonly IRepositoryJogo RepositorioJogo;
         private readonly IRepositoryPalpite RepositorioPalpite;
+        private readonly IRulesJogo RulesJogo;
         private Resposta<Jogo> Resposta;
         private Resposta<IEnumerable<JogoDTO>> RespostaListaDTO;
 
-        public ServiceJogo(IRepositoryJogo repositorioJogo, IRepositoryPalpite repositorioPalpite)
+        public ServiceJogo(IRepositoryJogo repositorioJogo, IRepositoryPalpite repositorioPalpite, IRulesJogo rulesJogo)
         {
             RepositorioJogo = repositorioJogo;
             Resposta = new Resposta<Jogo>();
             RespostaListaDTO = new Resposta<IEnumerable<JogoDTO>>();
             RepositorioPalpite = repositorioPalpite;
+            RulesJogo = rulesJogo;
         }
 
         public Resposta<Jogo> CriarJogo(CriarJogoDTO criarJogoDTO)
@@ -32,6 +35,12 @@ namespace GoBolao.Domain.Core.Services
             if (jogo.Invalido)
             {
                 Resposta.AdicionarNotificacao(jogo._Erros);
+                return Resposta;
+            }
+
+            if (!RulesJogo.AptoParaCriar(criarJogoDTO))
+            {
+                Resposta.AdicionarNotificacao(RulesJogo.ObterFalhas());
                 return Resposta;
             }
 
@@ -46,18 +55,19 @@ namespace GoBolao.Domain.Core.Services
         {
             RepositorioJogo.Dispose();
             RepositorioPalpite.Dispose();
+            RulesJogo.Dispose();
             GC.SuppressFinalize(this);
         }
 
         public Resposta<Jogo> FinalizarJogo(FinalizarJogoDTO finalizarJogoDTO)
         {
-            var jogo = RepositorioJogo.Obter(finalizarJogoDTO.IdJogo);
-
-            if(jogo == null)
+            if (!RulesJogo.AptoParaFinalizar(finalizarJogoDTO))
             {
-                Resposta.AdicionarNotificacao("Jogo inexistente.");
+                Resposta.AdicionarNotificacao(RulesJogo.ObterFalhas());
                 return Resposta;
             }
+
+            var jogo = RepositorioJogo.Obter(finalizarJogoDTO.IdJogo);
 
             var palpitesDoJogo = RepositorioPalpite.ObterPalpitesPorJogo(finalizarJogoDTO.IdJogo);
 

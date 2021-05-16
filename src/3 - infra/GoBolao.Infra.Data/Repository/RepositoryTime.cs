@@ -20,5 +20,11 @@ namespace GoBolao.Infra.Data.Repository
             Sql = _sql;
             DbSetTime = Sql.Set<Time>();
         }
+
+        public IEnumerable<Time> ObterTimesPeloNome(string nome)
+        {
+            var times = DbSetTime.Where(t => t.Nome == nome);
+            return times;
+        }
     }
 }

@@ -11,5 +11,6 @@ namespace GoBolao.Domain.Core.Interfaces.Repository
     {
         IEnumerable<JogoDTO> ObterJogosNaData(DateTime data, int idUsuario);
         IEnumerable<JogoDTO> ObterJogos(int idUsuario);
+        IEnumerable<Jogo> ObterJogosNaData(DateTime data);
     }
 }

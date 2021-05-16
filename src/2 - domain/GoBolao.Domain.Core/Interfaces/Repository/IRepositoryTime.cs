@@ -9,6 +9,6 @@ namespace GoBolao.Domain.Core.Interfaces.Repository
 {
     public interface IRepositoryTime : IRepositoryGenerico<Time>
     {
-
+        IEnumerable<Time> ObterTimesPeloNome(string nome);
     }
 }

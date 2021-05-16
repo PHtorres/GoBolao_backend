@@ -69,5 +69,11 @@ namespace GoBolao.Infra.Data.Repository
             var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARIO = idUsuario, DATA = data.Date });
             return jogos;
         }
+
+        public IEnumerable<Jogo> ObterJogosNaData(DateTime data)
+        {
+            var jogos = DbSetJogo.Where(j => j.DataHora.Date == data.Date);
+            return jogos;
+        }
     }
 }

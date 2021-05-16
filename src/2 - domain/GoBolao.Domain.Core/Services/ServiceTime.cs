@@ -1,6 +1,7 @@
 ﻿using GoBolao.Domain.Core.DTO;
 using GoBolao.Domain.Core.Entidades;
 using GoBolao.Domain.Core.Interfaces.Repository;
+using GoBolao.Domain.Core.Interfaces.Rules;
 using GoBolao.Domain.Core.Interfaces.Service;
 using GoBolao.Domain.Shared.DomainObjects;
 using System;
@@ -13,11 +14,13 @@ namespace GoBolao.Domain.Core.Services
     {
         private readonly IRepositoryTime RepositorioTime;
         private Resposta<Time> Resposta;
+        private readonly IRulesTime RulesTime;
 
-        public ServiceTime(IRepositoryTime repositorioTime)
+        public ServiceTime(IRepositoryTime repositorioTime, IRulesTime rulesTime)
         {
             RepositorioTime = repositorioTime;
             Resposta = new Resposta<Time>();
+            RulesTime = rulesTime;
         }
 
         public Resposta<Time> AlterarTime(AlterarTimeDTO alterarTimeDTO)
@@ -29,6 +32,12 @@ namespace GoBolao.Domain.Core.Services
             if (time.Invalido)
             {
                 Resposta.AdicionarNotificacao(time._Erros);
+                return Resposta;
+            }
+
+            if (!RulesTime.AptoParaAlterar(alterarTimeDTO))
+            {
+                Resposta.AdicionarNotificacao(RulesTime.ObterFalhas());
                 return Resposta;
             }
 
@@ -48,6 +57,12 @@ namespace GoBolao.Domain.Core.Services
                 return Resposta;
             }
 
+            if (!RulesTime.AptoParaCriar(criarTimeDTO))
+            {
+                Resposta.AdicionarNotificacao(RulesTime.ObterFalhas());
+                return Resposta;
+            }
+
             RepositorioTime.Adicionar(time);
             RepositorioTime.Salvar();
 
@@ -58,6 +73,7 @@ namespace GoBolao.Domain.Core.Services
         public void Dispose()
         {
             RepositorioTime.Dispose();
+            RulesTime.Dispose();
             GC.SuppressFinalize(this);
         }
 
