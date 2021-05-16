@@ -20,10 +20,16 @@ namespace GoBolao.Infra.Data.Repository
             DbSetUsuario = Sql.Set<Usuario>();
         }
 
-        public Usuario ObterUsuarioPorEmail(string email)
+        public IEnumerable<Usuario> ObterUsuariosPeloApelido(string apelido)
         {
-            var usuario = DbSetUsuario.Where(item => item.Email == email).FirstOrDefault();
-            return usuario;
+            var usuarios = DbSetUsuario.Where(item => item.Apelido == apelido).AsEnumerable();
+            return usuarios;
+        }
+
+        public IEnumerable<Usuario> ObterUsuariosPorEmail(string email)
+        {
+            var usuarios = DbSetUsuario.Where(item => item.Email == email).AsEnumerable();
+            return usuarios;
         }
     }
 }

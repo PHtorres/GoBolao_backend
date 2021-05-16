@@ -5,6 +5,7 @@ using GoBolao.Domain.Usuarios.Interfaces.Repository;
 using GoBolao.Domain.Usuarios.Interfaces.Service;
 using GoBolao.Domain.Usuarios.ManualMapper;
 using System;
+using System.Linq;
 
 namespace GoBolao.Domain.Usuarios.Services
 {
@@ -23,7 +24,7 @@ namespace GoBolao.Domain.Usuarios.Services
 
         public Resposta<UsuarioDTO> AutenticarUsuario(AutenticarUsuarioDTO autenticarUsuarioDTO)
         {
-            var usuario = RepositorioUsuario.ObterUsuarioPorEmail(autenticarUsuarioDTO.Email);
+            var usuario = RepositorioUsuario.ObterUsuariosPorEmail(autenticarUsuarioDTO.Email).FirstOrDefault();
 
             if(usuario == null)
             {

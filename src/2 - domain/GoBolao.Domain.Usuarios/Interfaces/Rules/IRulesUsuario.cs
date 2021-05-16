@@ -9,6 +9,7 @@ namespace GoBolao.Domain.Usuarios.Interfaces.Rules
     public interface IRulesUsuario:IRules
     {
         bool AptoParaCriar(CriarUsuarioDTO criarUsuarioDTO);
-        bool AptoParaAlterar(AlterarUsuarioDTO alterarUsuarioDTO);
+        bool AptoParaAlterar(AlterarUsuarioDTO alterarUsuarioDTO, int idUsuario);
+        bool AptoParaRemover(int idUsuarioRemover);
     }
 }

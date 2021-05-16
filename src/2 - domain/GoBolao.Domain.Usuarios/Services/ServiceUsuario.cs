@@ -30,7 +30,7 @@ namespace GoBolao.Domain.Usuarios.Services
 
         public Resposta<UsuarioDTO> AlterarUsuario(AlterarUsuarioDTO alterarUsuarioDTO, int idUsuarioAcao)
         {
-            var usuario = RepositorioUsuario.Obter(alterarUsuarioDTO.Id);
+            var usuario = RepositorioUsuario.Obter(idUsuarioAcao);
             usuario.AlterarApelido(alterarUsuarioDTO.Apelido);
             usuario.AlterarEmail(alterarUsuarioDTO.Email);
 
@@ -40,7 +40,7 @@ namespace GoBolao.Domain.Usuarios.Services
                 return Resposta;
             }
 
-            if (!RulesUsuario.AptoParaAlterar(alterarUsuarioDTO))
+            if (!RulesUsuario.AptoParaAlterar(alterarUsuarioDTO, idUsuarioAcao))
             {
                 Resposta.AdicionarNotificacao(RulesUsuario.ObterFalhas());
                 return Resposta;
@@ -108,14 +108,15 @@ namespace GoBolao.Domain.Usuarios.Services
             return respostaLista;
         }
 
-        public Resposta<UsuarioDTO> RemoverUsuario(int idUsuario, int IdUsuarioAcao)
+        public Resposta<UsuarioDTO> RemoverUsuario(int IdUsuarioAcao)
         {
-            var usuario = RepositorioUsuario.Obter(idUsuario);
-            if (usuario == null)
+            if (!RulesUsuario.AptoParaRemover(IdUsuarioAcao))
             {
-                Resposta.AdicionarNotificacao("Usuário inexistente.");
+                Resposta.AdicionarNotificacao(RulesUsuario.ObterFalhas());
                 return Resposta;
             }
+
+            var usuario = RepositorioUsuario.Obter(IdUsuarioAcao);
 
             RepositorioUsuario.Remover(usuario);
             RepositorioUsuario.Salvar();

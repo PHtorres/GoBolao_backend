@@ -1,6 +1,7 @@
 ﻿using GoBolao.Domain.Core.DTO;
 using GoBolao.Domain.Core.Entidades;
 using GoBolao.Domain.Core.Interfaces.Repository;
+using GoBolao.Domain.Core.Interfaces.Rules;
 using GoBolao.Domain.Core.Interfaces.Service;
 using GoBolao.Domain.Shared.DomainObjects;
 using System;
@@ -12,16 +13,18 @@ namespace GoBolao.Domain.Core.Services
     public class ServiceBolao : IServiceBolao
     {
         private readonly IRepositoryBolao RepositorioBolao;
+        private readonly IRulesBolao RulesBolao;
         private Resposta<Bolao> Resposta;
         private Resposta<BolaoDTO> RespostaDTO;
         private Resposta<IEnumerable<BolaoDTO>> RespostaListaDTO;
 
-        public ServiceBolao(IRepositoryBolao repositorioBolao)
+        public ServiceBolao(IRepositoryBolao repositorioBolao, IRulesBolao rulesBolao)
         {
             RepositorioBolao = repositorioBolao;
             Resposta = new Resposta<Bolao>();
             RespostaDTO = new Resposta<BolaoDTO>();
             RespostaListaDTO = new Resposta<IEnumerable<BolaoDTO>>();
+            RulesBolao = rulesBolao;
         }
 
         public Resposta<Bolao> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarBolaoDTO alterarNomeImagemAvatarBolaoDTO, int idUsuarioAcao)
@@ -45,9 +48,17 @@ namespace GoBolao.Domain.Core.Services
         public Resposta<Bolao> CriarBolao(CriarBolaoDTO criarBolaoDTO, int idUsuarioAcao)
         {
             var bolao = new Bolao(criarBolaoDTO.Nome, idUsuarioAcao, criarBolaoDTO.IdCampeonato, criarBolaoDTO.Privacidade);
+
             if (bolao.Invalido)
             {
                 Resposta.AdicionarNotificacao(bolao._Erros);
+                return Resposta;
+            }
+
+
+            if (!RulesBolao.AptoParaCriarBolao(criarBolaoDTO))
+            {
+                Resposta.AdicionarNotificacao(RulesBolao.ObterFalhas());
                 return Resposta;
             }
 
@@ -61,13 +72,14 @@ namespace GoBolao.Domain.Core.Services
         public void Dispose()
         {
             RepositorioBolao.Dispose();
+            RulesBolao.Dispose();
             GC.SuppressFinalize(this);
         }
 
         public Resposta<BolaoDTO> ObterBolaoPorId(int idBolao)
         {
             var bolaoDTO = RepositorioBolao.ObterBolaoPorId(idBolao);
-            if(bolaoDTO == null)
+            if (bolaoDTO == null)
             {
                 RespostaDTO.AdicionarNotificacao("Bolao nao encontrado.");
                 return RespostaDTO;

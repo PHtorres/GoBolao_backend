@@ -48,10 +48,10 @@ namespace GoBolao.Service.API.Controllers
             return Ok(ServicoUsuario.AlterarUsuario(alterarUsuarioDTO, IdUsuarioAcao));
         }
 
-        [HttpDelete("{id}")]
-        public ActionResult<Resposta<UsuarioDTO>> Delete(int id)
+        [HttpDelete]
+        public ActionResult<Resposta<UsuarioDTO>> Delete()
         {
-            return Ok(ServicoUsuario.RemoverUsuario(id, IdUsuarioAcao));
+            return Ok(ServicoUsuario.RemoverUsuario(IdUsuarioAcao));
         }
     }
 }

@@ -50,6 +50,12 @@ namespace GoBolao.Infra.Data.Repository
             return bolaoDTO;
         }
 
+        public IEnumerable<Bolao> ObterBoloesPeloNome(string nome)
+        {
+            var boloes = DbSetBolao.Where(b => b.Nome == nome);
+            return boloes;
+        }
+
         public IEnumerable<BolaoDTO> ObterBoloesPesquisa(string pesquisa)
         {
             var listaBolaoDTO = DbSetBolao.Where(bolao => bolao.Nome.Contains(pesquisa))
