@@ -30,6 +30,11 @@ namespace GoBolao.Infra.Data.Repository
             DbSetGenerico.Update(obj);
         }
 
+        public void AtualizarLista(IEnumerable<EntidadeGenerica> listaObj)
+        {
+            DbSetGenerico.UpdateRange(listaObj);
+        }
+
         public void Dispose()
         {
             Sql.Dispose();

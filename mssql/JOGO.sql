@@ -9,14 +9,12 @@ CREATE TABLE [dbo].[JOGO](
 	[Id] [int] IDENTITY(1,1) NOT NULL,
 	[IdCampeonato] [int] NOT NULL,
 	[DataHora] [datetime] NOT NULL,
-	[Mandante] [varchar](50) NOT NULL,
-	[Visitante] [varchar](50) NOT NULL,
-	[UrlAvatarMandante] [varchar](100) NULL,
-	[UrlAvatarVisitante] [varchar](100) NULL,
+	[IdMandante] [int] NOT NULL,
+	[IdVisitante] [int] NOT NULL,
 	[PlacarMandante] [int] NULL,
 	[PlacarVisitante] [int] NULL,
-	[Resultado] [varchar](10) NULL,
 	[Fase] [varchar](30) NOT NULL,
+	[Finalizado] [bit] NOT NULL,
  CONSTRAINT [PK_JOGO] PRIMARY KEY CLUSTERED 
 (
 	[Id] ASC
@@ -29,6 +27,20 @@ REFERENCES [dbo].[CAMPEONATO] ([Id])
 GO
 
 ALTER TABLE [dbo].[JOGO] CHECK CONSTRAINT [FK_JOGO_CAMPEONATO]
+GO
+
+ALTER TABLE [dbo].[JOGO]  WITH CHECK ADD  CONSTRAINT [FK_JOGO_MANDANTE] FOREIGN KEY([IdMandante])
+REFERENCES [dbo].[TIME] ([Id])
+GO
+
+ALTER TABLE [dbo].[JOGO] CHECK CONSTRAINT [FK_JOGO_MANDANTE]
+GO
+
+ALTER TABLE [dbo].[JOGO]  WITH CHECK ADD  CONSTRAINT [FK_JOGO_VISITANTE] FOREIGN KEY([IdVisitante])
+REFERENCES [dbo].[TIME] ([Id])
+GO
+
+ALTER TABLE [dbo].[JOGO] CHECK CONSTRAINT [FK_JOGO_VISITANTE]
 GO
 
 

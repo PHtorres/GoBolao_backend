@@ -15,9 +15,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoBolao.Domain.Usuarios", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoBolao.Domain.Shared", "src\2 - domain\GoBolao.Domain.Shared\GoBolao.Domain.Shared.csproj", "{7C7742A7-906B-42F7-BD96-6CBCB5DB774E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoBolao.Infra.CrossCuting.IOC", "src\3 - infra\GoBolao.Infra.CrossCuting.IOC\GoBolao.Infra.CrossCuting.IOC.csproj", "{8A0CA72E-22A7-4B54-820A-9D2E39241633}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoBolao.Infra.CrossCuting.IOC", "src\3 - infra\GoBolao.Infra.CrossCuting.IOC\GoBolao.Infra.CrossCuting.IOC.csproj", "{8A0CA72E-22A7-4B54-820A-9D2E39241633}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoBolao.Service.API", "src\1 - service\GoBolao.Service.API\GoBolao.Service.API.csproj", "{041E676A-3604-4AC7-9B33-7D0BD7947AC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoBolao.Service.API", "src\1 - service\GoBolao.Service.API\GoBolao.Service.API.csproj", "{041E676A-3604-4AC7-9B33-7D0BD7947AC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoBolao.Infra.Criptografia", "src\3 - infra\GoBolao.Infra.Criptografia\GoBolao.Infra.Criptografia.csproj", "{355B5013-88C9-48DB-BA38-7C485202690C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoBolao.Domain.Core", "src\2 - domain\GoBolao.Domain.Core\GoBolao.Domain.Core.csproj", "{98465403-1838-483B-B030-5B51F97E67DD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,14 @@ Global
 		{041E676A-3604-4AC7-9B33-7D0BD7947AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{041E676A-3604-4AC7-9B33-7D0BD7947AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{041E676A-3604-4AC7-9B33-7D0BD7947AC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{355B5013-88C9-48DB-BA38-7C485202690C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{355B5013-88C9-48DB-BA38-7C485202690C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{355B5013-88C9-48DB-BA38-7C485202690C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{355B5013-88C9-48DB-BA38-7C485202690C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{98465403-1838-483B-B030-5B51F97E67DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{98465403-1838-483B-B030-5B51F97E67DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{98465403-1838-483B-B030-5B51F97E67DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{98465403-1838-483B-B030-5B51F97E67DD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +67,8 @@ Global
 		{7C7742A7-906B-42F7-BD96-6CBCB5DB774E} = {3608F340-3D80-4A00-A9AF-C0622973969A}
 		{8A0CA72E-22A7-4B54-820A-9D2E39241633} = {C3A29A5D-7AA3-4F3E-804E-1EC677B5F4B3}
 		{041E676A-3604-4AC7-9B33-7D0BD7947AC5} = {9EF20E72-B3B7-4000-B374-89836843DCAE}
+		{355B5013-88C9-48DB-BA38-7C485202690C} = {C3A29A5D-7AA3-4F3E-804E-1EC677B5F4B3}
+		{98465403-1838-483B-B030-5B51F97E67DD} = {3608F340-3D80-4A00-A9AF-C0622973969A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78667021-D764-45B6-9868-5FA3ECC5F2B4}
