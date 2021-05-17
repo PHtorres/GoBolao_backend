@@ -9,7 +9,7 @@ using System.Text;
 
 namespace GoBolao.Domain.Core.Rules
 {
-    public abstract class RulesTime : RulesBase, IRulesTime
+    public class RulesTime : RulesBase, IRulesTime
     {
         private readonly IRepositoryTime RepositorioTime;
 

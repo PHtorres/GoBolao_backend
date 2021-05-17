@@ -10,7 +10,7 @@ using System.Text;
 
 namespace GoBolao.Domain.Usuarios.Rules
 {
-    public abstract class RulesUsuario : RulesBase, IRulesUsuario
+    public class RulesUsuario : RulesBase, IRulesUsuario
     {
         private readonly IRepositoryUsuario RepositorioUsuario;
 

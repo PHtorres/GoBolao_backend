@@ -9,11 +9,11 @@ using System.Text;
 
 namespace GoBolao.Domain.Core.Rules
 {
-    public abstract class RulesCampeonato : RulesBase, IRulesCampeonato
+    public class RulesCampeonato : RulesBase, IRulesCampeonato
     {
         private readonly IRepositoryCampeonato RepositorioCampeonato;
 
-        protected RulesCampeonato(IRepositoryCampeonato repositorioCampeonato)
+        public RulesCampeonato(IRepositoryCampeonato repositorioCampeonato)
         {
             RepositorioCampeonato = repositorioCampeonato;
         }

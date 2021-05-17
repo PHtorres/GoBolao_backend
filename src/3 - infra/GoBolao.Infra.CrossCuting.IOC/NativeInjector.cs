@@ -23,29 +23,31 @@ namespace GoBolao.Infra.CrossCuting.IOC
             service.AddScoped<ContextoMSSQL>();
 
             service.AddScoped<IRepositoryUsuario, RepositoryUsuario>();
-            service.AddScoped<IServiceUsuario, ServiceUsuario>();
             service.AddScoped<IRulesUsuario, RulesUsuario>();
+            service.AddScoped<IServiceUsuario, ServiceUsuario>();
 
             service.AddScoped<IServiceCriptografia, ServiceHash>();
 
             service.AddScoped<IServiceAutenticacao, ServiceAutenticacao>();
 
+            service.AddScoped<IRepositoryTime, RepositoryTime>();
+            service.AddScoped<IRulesTime, RulesTime>();
+            service.AddScoped<IServiceTime, ServiceTime>();
+
             service.AddScoped<IRepositoryCampeonato, RepositoryCampeonato>();
-            service.AddScoped<IServiceCampeonato, ServiceCampeonato>();
             service.AddScoped<IRulesCampeonato, RulesCampeonato>();
+            service.AddScoped<IServiceCampeonato, ServiceCampeonato>();
 
             service.AddScoped<IRepositoryBolao, RepositoryBolao>();
-            service.AddScoped<IServiceBolao, ServiceBolao>();
             service.AddScoped<IRulesBolao, RulesBolao>();
+            service.AddScoped<IServiceBolao, ServiceBolao>();
 
             service.AddScoped<IRepositoryJogo, RepositoryJogo>();
+            service.AddScoped<IRulesJogo, RulesJogo>();
             service.AddScoped<IServiceJogo, ServiceJogo>();
 
             service.AddScoped<IRepositoryPalpite, RepositoryPalpite>();
             service.AddScoped<IServicePalpite, ServicePalpite>();
-
-            service.AddScoped<IRepositoryTime, RepositoryTime>();
-            service.AddScoped<IServiceTime, ServiceTime>();
         }
     }
 }
