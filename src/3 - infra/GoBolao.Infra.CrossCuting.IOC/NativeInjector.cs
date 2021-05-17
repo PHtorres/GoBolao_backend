@@ -47,7 +47,10 @@ namespace GoBolao.Infra.CrossCuting.IOC
             service.AddScoped<IServiceJogo, ServiceJogo>();
 
             service.AddScoped<IRepositoryPalpite, RepositoryPalpite>();
+            service.AddScoped<IRulesPalpite, RulesPalpite>();
             service.AddScoped<IServicePalpite, ServicePalpite>();
+
+            service.AddScoped<IRepositoryBolaoUsuario, RepositoryBolaoUsuario>();
         }
     }
 }
