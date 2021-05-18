@@ -20,5 +20,11 @@ namespace GoBolao.Infra.Data.Repository
             Sql = _sql;
             DbSetBolaoUsuario = Sql.Set<BolaoUsuario>();
         }
+
+        public IEnumerable<BolaoUsuario> ObterUsuariosDoBolao(int idBolao)
+        {
+            var bolaoUsuarios = DbSetBolaoUsuario.Where(bu => bu.IdBolao == idBolao);
+            return bolaoUsuarios;
+        }
     }
 }

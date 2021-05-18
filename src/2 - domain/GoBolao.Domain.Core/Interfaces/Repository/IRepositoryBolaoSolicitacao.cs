@@ -9,6 +9,6 @@ namespace GoBolao.Domain.Core.Interfaces.Repository
 {
     public interface IRepositoryBolaoSolicitacao:IRepositoryGenerico<BolaoSolicitacao>
     {
-
+        IEnumerable<BolaoSolicitacaoDTO> ObterSolicitacoesPorBolao(int idBolao);
     }
 }

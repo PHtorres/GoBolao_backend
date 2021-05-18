@@ -82,7 +82,7 @@ namespace GoBolao.Domain.Core.Services
             GC.SuppressFinalize(this);
         }
 
-        public Resposta<BolaoDTO> ObterBolaoPorId(int idBolao)
+        public Resposta<BolaoDTO> ObterBolaoPorId(int idBolao, int idUsuarioAcao)
         {
             var bolaoDTO = RepositorioBolao.ObterBolaoPorId(idBolao);
             if (bolaoDTO == null)
@@ -91,8 +91,15 @@ namespace GoBolao.Domain.Core.Services
                 return RespostaDTO;
             }
 
+            bolaoDTO.SouCriadorBolao = RepositorioBolao.Obter(idBolao).IdCriador == idUsuarioAcao;
+
             RespostaDTO.AdicionarConteudo(bolaoDTO);
             return RespostaDTO;
+        }
+
+        public Resposta<Bolao> ParticiparDeBolaoPublico(ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO, int idUsuarioAcao)
+        {
+            throw new NotImplementedException();
         }
 
         public Resposta<IEnumerable<BolaoDTO>> PesquisarBoloes(string pesquisa)
@@ -100,6 +107,12 @@ namespace GoBolao.Domain.Core.Services
             var resultadoPesquisa = RepositorioBolao.ObterBoloesPesquisa(pesquisa);
             RespostaListaDTO.AdicionarConteudo(resultadoPesquisa);
             return RespostaListaDTO;
+        }
+
+        public Resposta<Bolao> SairDeBolao(int idBolao, int idUsuarioAcao)
+        {
+            //criador do bolao nao pode sair
+            throw new NotImplementedException();
         }
     }
 }

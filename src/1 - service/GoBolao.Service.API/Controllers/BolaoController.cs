@@ -24,7 +24,7 @@ namespace GoBolao.Service.API.Controllers
         [HttpGet("{idBolao}")]
         public ActionResult<Resposta<BolaoDTO>> Get(int idBolao)
         {
-            return Ok(ServicoBolao.ObterBolaoPorId(idBolao));
+            return Ok(ServicoBolao.ObterBolaoPorId(idBolao, IdUsuarioAcao));
         }
 
         [HttpGet]

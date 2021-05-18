@@ -11,7 +11,9 @@ namespace GoBolao.Domain.Core.Interfaces.Service
     {
         Resposta<Bolao> CriarBolao(CriarBolaoDTO criarBolaoDTO, int idUsuarioAcao);
         Resposta<Bolao> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarBolaoDTO alterarNomeImagemAvatarBolaoDTO, int idUsuarioAcao);
-        Resposta<BolaoDTO> ObterBolaoPorId(int idBolao);
+        Resposta<BolaoDTO> ObterBolaoPorId(int idBolao, int idUsuarioAcao);
         Resposta<IEnumerable<BolaoDTO>> PesquisarBoloes(string pesquisa);
+        Resposta<Bolao> ParticiparDeBolaoPublico(ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO, int idUsuarioAcao);
+        Resposta<Bolao> SairDeBolao(int idBolao, int idUsuarioAcao);
     }
 }

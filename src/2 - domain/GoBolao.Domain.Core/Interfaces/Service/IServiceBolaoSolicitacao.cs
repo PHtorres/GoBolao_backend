@@ -13,5 +13,6 @@ namespace GoBolao.Domain.Core.Interfaces.Service
         Resposta<BolaoSolicitacao> DesfazerSolicitacao(int idSolicitacao, int idUsuarioAcao);
         Resposta<BolaoSolicitacao> AceitarSolicitacao(AceitarBolaoSolicitacaoDTO aceitarBolaoSolicitacaoDTO, int idUsuarioAcao);
         Resposta<BolaoSolicitacao> RecusarSolicitacao(RecusarBolaoSolicitacaoDTO recusarBolaoSolicitacaoDTO, int idUsuarioAcao);
+        Resposta<IEnumerable<BolaoSolicitacaoDTO>> ObterSolicitacoesPorBolao(int idBolao, int idUsuarioAcao);
     }
 }
