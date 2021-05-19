@@ -40,12 +40,25 @@ namespace GoBolao.Service.API.Controllers
             return Ok(ServicoBolao.CriarBolao(criarBolaoDTO, IdUsuarioAcao));
         }
 
-
         [HttpPatch]
         [Route("avatar")]
         public ActionResult<Resposta<Bolao>> Patch([FromBody] AlterarNomeImagemAvatarBolaoDTO alterarNomeImagemAvatarBolaoDTO)
         {
             return Ok(ServicoBolao.AlterarNomeImagemAvatar(alterarNomeImagemAvatarBolaoDTO, IdUsuarioAcao));
+        }
+
+        [HttpPost]
+        [Route("participar")]
+        public ActionResult<Resposta<BolaoUsuario>> PostParticipar([FromBody] ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO)
+        {
+            return Ok(ServicoBolao.ParticiparDeBolaoPublico(participarDeBolaoPublicoDTO, IdUsuarioAcao));
+        }
+
+        [HttpDelete]
+        [Route("sair/{idBolao}")]
+        public ActionResult<Resposta<BolaoUsuario>> DeleteSair(int idBolao)
+        {
+            return Ok(ServicoBolao.SairDeBolao(idBolao, IdUsuarioAcao));
         }
     }
 }
