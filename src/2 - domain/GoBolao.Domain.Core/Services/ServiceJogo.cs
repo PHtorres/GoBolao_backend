@@ -74,17 +74,30 @@ namespace GoBolao.Domain.Core.Services
             var palpitesAcertosPlacar = palpitesDoJogo
                             .Where(p =>
                             p.PlacarMandantePalpite == finalizarJogoDTO.PlacarMandante && p.PlacarVisitantePalpite == finalizarJogoDTO.PlacarVisitante
-                            ).AsEnumerable();
+                            ).ToList();
 
             var palpitesAcertosResultado = palpitesDoJogo
                                            .Where(p =>
                                            ResultadoPorPlacares(p.PlacarMandantePalpite, p.PlacarVisitantePalpite) == ResultadoPorPlacares(finalizarJogoDTO.PlacarMandante, finalizarJogoDTO.PlacarVisitante)
                                            && !palpitesAcertosPlacar.Contains(p)
-                                           ).AsEnumerable();
+                                           ).ToList();
+
+            var palpitesChegouPerto = palpitesDoJogo
+                               .Where(p =>
+                               (DiferencaDeUmApenas(finalizarJogoDTO.PlacarMandante, p.PlacarMandantePalpite) || DiferencaDeUmApenas(finalizarJogoDTO.PlacarVisitante, p.PlacarVisitantePalpite))
+                               && !palpitesAcertosPlacar.Contains(p)
+                               && !palpitesAcertosResultado.Contains(p)
+                               ).ToList();
 
 
+            foreach (var palpiteChegouPerto in palpitesChegouPerto)
+            {
+                palpiteChegouPerto.AlterarPontos(1);
+                palpiteChegouPerto.FinalizarPalpite();
+            }
 
-            foreach(var palpiteAcertosResultado in palpitesAcertosResultado)
+
+            foreach (var palpiteAcertosResultado in palpitesAcertosResultado)
             {
                 palpiteAcertosResultado.AlterarPontos(3);
                 palpiteAcertosResultado.FinalizarPalpite();
@@ -96,6 +109,7 @@ namespace GoBolao.Domain.Core.Services
                 palpiteAcertosPlacar.FinalizarPalpite();
             }
 
+            RepositorioPalpite.AtualizarLista(palpitesChegouPerto);
             RepositorioPalpite.AtualizarLista(palpitesAcertosResultado);
             RepositorioPalpite.AtualizarLista(palpitesAcertosPlacar);
             RepositorioPalpite.Salvar();
@@ -146,6 +160,28 @@ namespace GoBolao.Domain.Core.Services
             }
 
             return Resultado.Empate;
+        }
+
+        private bool DiferencaDeUmApenas(int placarReal, int placarPalpite)
+        {
+
+            if(placarReal > placarPalpite)
+            {
+                if((placarPalpite + 1) == placarReal)
+                {
+                    return true;
+                }
+            }
+
+            if (placarReal < placarPalpite)
+            {
+                if ((placarPalpite - 1) == placarReal)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
     }
 }
