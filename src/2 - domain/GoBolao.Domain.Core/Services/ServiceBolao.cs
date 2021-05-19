@@ -6,6 +6,7 @@ using GoBolao.Domain.Core.Interfaces.Service;
 using GoBolao.Domain.Shared.DomainObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GoBolao.Domain.Core.Services
@@ -16,6 +17,7 @@ namespace GoBolao.Domain.Core.Services
         private readonly IRepositoryBolaoUsuario RepositorioBolaoUsuario;
         private readonly IRulesBolao RulesBolao;
         private Resposta<Bolao> Resposta;
+        private Resposta<BolaoUsuario> RespostaBolaoUsuario;
         private Resposta<BolaoDTO> RespostaDTO;
         private Resposta<IEnumerable<BolaoDTO>> RespostaListaDTO;
 
@@ -23,6 +25,7 @@ namespace GoBolao.Domain.Core.Services
         {
             RepositorioBolao = repositorioBolao;
             Resposta = new Resposta<Bolao>();
+            RespostaBolaoUsuario = new Resposta<BolaoUsuario>();
             RespostaDTO = new Resposta<BolaoDTO>();
             RespostaListaDTO = new Resposta<IEnumerable<BolaoDTO>>();
             RulesBolao = rulesBolao;
@@ -97,9 +100,27 @@ namespace GoBolao.Domain.Core.Services
             return RespostaDTO;
         }
 
-        public Resposta<Bolao> ParticiparDeBolaoPublico(ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO, int idUsuarioAcao)
+        public Resposta<BolaoUsuario> ParticiparDeBolaoPublico(ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO, int idUsuarioAcao)
         {
-            throw new NotImplementedException();
+            var bolaoUsuario = new BolaoUsuario(participarDeBolaoPublicoDTO.IdBolao, idUsuarioAcao);
+
+            if (bolaoUsuario.Invalido)
+            {
+                Resposta.AdicionarNotificacao(bolaoUsuario._Erros);
+                return RespostaBolaoUsuario;
+            }
+
+            if (!RulesBolao.AptoParaParticiparDeBolaoPublico(participarDeBolaoPublicoDTO, idUsuarioAcao))
+            {
+                Resposta.AdicionarNotificacao(RulesBolao.ObterFalhas());
+                return RespostaBolaoUsuario;
+            }
+
+            RepositorioBolaoUsuario.Adicionar(bolaoUsuario);
+            RepositorioBolao.Salvar();
+
+            RespostaBolaoUsuario.AdicionarConteudo(bolaoUsuario);
+            return RespostaBolaoUsuario;
         }
 
         public Resposta<IEnumerable<BolaoDTO>> PesquisarBoloes(string pesquisa)
@@ -109,10 +130,21 @@ namespace GoBolao.Domain.Core.Services
             return RespostaListaDTO;
         }
 
-        public Resposta<Bolao> SairDeBolao(int idBolao, int idUsuarioAcao)
+        public Resposta<BolaoUsuario> SairDeBolao(int idBolao, int idUsuarioAcao)
         {
-            //criador do bolao nao pode sair
-            throw new NotImplementedException();
+            if (!RulesBolao.AptoParaSairDoBolao(idBolao, idUsuarioAcao))
+            {
+                Resposta.AdicionarNotificacao(RulesBolao.ObterFalhas());
+                return RespostaBolaoUsuario;
+            }
+
+            var bolaoUsuario = RepositorioBolaoUsuario.ObterUsuariosDoBolao(idBolao).Where(bu => bu.IdUsuario == idUsuarioAcao).FirstOrDefault();
+
+            RepositorioBolaoUsuario.Remover(bolaoUsuario);
+            RepositorioBolaoUsuario.Salvar();
+
+            RespostaBolaoUsuario.AdicionarConteudo(bolaoUsuario);
+            return RespostaBolaoUsuario;
         }
     }
 }

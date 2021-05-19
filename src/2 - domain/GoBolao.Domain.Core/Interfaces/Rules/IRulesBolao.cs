@@ -9,5 +9,7 @@ namespace GoBolao.Domain.Core.Interfaces.Rules
     public interface IRulesBolao:IRules
     {
         bool AptoParaCriarBolao(CriarBolaoDTO criarBolaoDTO);
+        bool AptoParaParticiparDeBolaoPublico(ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO, int idUsuarioAcao);
+        bool AptoParaSairDoBolao(int idBolao, int idUsuarioAcao);
     }
 }
