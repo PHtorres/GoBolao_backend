@@ -7,6 +7,7 @@ namespace GoBolao.Domain.Core.DTO
     public class PalpiteDTO
     {
 		public int Id { get; set; }
+		public int IdJogo { get; set; }
 		public string Mandante { get; set; }
 		public string Visitante { get; set; }
 		public string NomeImagemAvatarMandante { get; set; }

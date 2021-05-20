@@ -30,6 +30,7 @@ namespace GoBolao.Infra.Data.Repository
         {
             var query = @"SELECT
                          p.Id,
+                         j.Id IdJogo,
                          (SELECT NOME FROM TIME T WHERE T.Id = J.IdMandante) Mandante,
                          (SELECT NOME FROM TIME T WHERE T.Id = J.IdVisitante) Visitante,
                          (SELECT NomeImagemAvatar FROM TIME T WHERE T.Id = J.IdMandante) NomeImagemAvatarMandante,
@@ -46,7 +47,8 @@ namespace GoBolao.Infra.Data.Repository
                          JOGO J
                          WHERE 
                          P.IdUsuario = @ID_USUARIO AND
-                         P.IdJogo = J.Id";
+                         P.IdJogo = J.Id
+                         ORDER BY p.DataHora DESC";
 
             var palpites = Sql.Database.GetDbConnection().Query<PalpiteDTO>(query, new { ID_USUARIO = idUsuario });
             return palpites;
