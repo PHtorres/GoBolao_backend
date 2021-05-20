@@ -31,6 +31,7 @@ namespace GoBolao.Infra.Data.Repository
                                      .Join(DbSetUsuario, b => b.IdCriador, u => u.Id,
                                      (b, u) => new
                                      {
+                                         IdBolao = b.Id,
                                          IdCampeonato = b.IdCampeonato,
                                          Nome = b.Nome,
                                          NomeCriador = u.Apelido,
@@ -40,6 +41,7 @@ namespace GoBolao.Infra.Data.Repository
                                      .Join(DbSetCampeonato, b => b.IdCampeonato, c => c.Id,
                                      (b, c) => new BolaoDTO
                                      {
+                                         IdBolao = b.IdBolao,
                                          Nome = b.Nome,
                                          NomeCampeonato = c.Nome,
                                          NomeCriador = b.NomeCriador,
@@ -62,6 +64,7 @@ namespace GoBolao.Infra.Data.Repository
                          .Join(DbSetUsuario, b => b.IdCriador, u => u.Id,
                          (b, u) => new
                          {
+                             IdBolao = b.Id,
                              IdCampeonato = b.IdCampeonato,
                              Nome = b.Nome,
                              NomeCriador = u.Apelido,
@@ -71,6 +74,7 @@ namespace GoBolao.Infra.Data.Repository
                          .Join(DbSetCampeonato, b => b.IdCampeonato, c => c.Id,
                          (b, c) => new BolaoDTO
                          {
+                             IdBolao = b.IdBolao,
                              Nome = b.Nome,
                              NomeCampeonato = c.Nome,
                              NomeCriador = b.NomeCriador,

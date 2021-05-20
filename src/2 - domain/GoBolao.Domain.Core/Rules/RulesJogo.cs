@@ -9,13 +9,13 @@ using System.Text;
 
 namespace GoBolao.Domain.Core.Rules
 {
-    public abstract class RulesJogo : RulesBase, IRulesJogo
+    public class RulesJogo : RulesBase, IRulesJogo
     {
         private readonly IRepositoryJogo RepositorioJogo;
         private readonly IRepositoryTime RepositorioTime;
         private readonly IRepositoryCampeonato RepositorioCampeonato;
 
-        protected RulesJogo(IRepositoryJogo repositorioJogo, IRepositoryTime repositorioTime, IRepositoryCampeonato repositorioCampeonato)
+        public RulesJogo(IRepositoryJogo repositorioJogo, IRepositoryTime repositorioTime, IRepositoryCampeonato repositorioCampeonato)
         {
             RepositorioJogo = repositorioJogo;
             RepositorioTime = repositorioTime;

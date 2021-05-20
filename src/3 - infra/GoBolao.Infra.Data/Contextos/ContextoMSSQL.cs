@@ -13,6 +13,8 @@ namespace GoBolao.Infra.Data.Contextos
             builder.ApplyConfiguration(new JogoMapping());
             builder.ApplyConfiguration(new PalpiteMapping());
             builder.ApplyConfiguration(new TimeMapping());
+            builder.ApplyConfiguration(new BolaoUsuarioMapping());
+            builder.ApplyConfiguration(new BolaoSolicitacaoMapping());
             base.OnModelCreating(builder);
         }
 
