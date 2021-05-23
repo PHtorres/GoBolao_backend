@@ -22,23 +22,31 @@ namespace GoBolao.Service.API.Controllers
         [HttpPost]
         public ActionResult<RespostaAutenticacao> Post([FromBody] AutenticarUsuarioDTO autenticarUsuarioDTO)
         {
-            var resposta = ServicoAutenticacao.AutenticarUsuario(autenticarUsuarioDTO);
-
-            if (resposta.Sucesso)
+            try
             {
+                var resposta = ServicoAutenticacao.AutenticarUsuario(autenticarUsuarioDTO);
+
+                if (resposta.Sucesso)
+                {
+                    return Ok(new RespostaAutenticacao
+                    {
+                        Token = GerarTokenUsuario(resposta.Conteudo.Id),
+                        Resposta = resposta
+                    });
+                }
+
+
                 return Ok(new RespostaAutenticacao
                 {
-                    Token = GerarTokenUsuario(resposta.Conteudo.Id),
+                    Token = null,
                     Resposta = resposta
                 });
             }
-
-
-            return Ok(new RespostaAutenticacao
+            catch(Exception e)
             {
-                Token = null,
-                Resposta = resposta
-            });
+                return Ok($@"{e.Messege}")
+            }
+           
         }
 
         private string GerarTokenUsuario(int idUsuario)
