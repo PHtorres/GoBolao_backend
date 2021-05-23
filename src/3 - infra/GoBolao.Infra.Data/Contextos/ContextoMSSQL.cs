@@ -28,7 +28,8 @@ namespace GoBolao.Infra.Data.Contextos
             //var servicoAppSettings = new ServiceAppSettings();
             //return servicoAppSettings.ConexaoMSSQL();
 
-            return "server=rgbsys.dyndns.info\\rgb2014,35460;uid=sa;database=PAULO_TESTE;pwd=chicoedson;";
+            //return "server=rgbsys.dyndns.info\\rgb2014,35460;uid=sa;database=PAULO_TESTE;pwd=chicoedson;";
+            return "Server=tcp:gobolao-server.database.windows.net,1433;Initial Catalog=gobolaodb;Persist Security Info=False;User ID=ph;Password=gtfla32!@#$;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
         }
     }
 }
