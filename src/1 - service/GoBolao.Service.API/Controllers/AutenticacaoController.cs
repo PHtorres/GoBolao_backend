@@ -44,7 +44,7 @@ namespace GoBolao.Service.API.Controllers
             }
             catch(Exception e)
             {
-                return Ok($@"{e.Messege}")
+                return Ok($@"{e.Messege}");
             }
            
         }
