@@ -1,4 +1,5 @@
-﻿using GoBolao.Domain.Usuarios.DTO;
+﻿using System;
+using GoBolao.Domain.Usuarios.DTO;
 using GoBolao.Domain.Usuarios.Interfaces.Service;
 using GoBolao.Service.API.Models;
 using GoBolao.Service.API.Services;
@@ -44,7 +45,9 @@ namespace GoBolao.Service.API.Controllers
             }
             catch(Exception e)
             {
-                return Ok($@"{e.Messege}");
+                return Ok($@"{e.Message}
+                              {e.InnerException}
+                              {e.StackTrace}");
             }
            
         }
