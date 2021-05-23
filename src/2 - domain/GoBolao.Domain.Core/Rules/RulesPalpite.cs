@@ -46,7 +46,7 @@ namespace GoBolao.Domain.Core.Rules
 
         public IReadOnlyCollection<string> ObterFalhas()
         {
-            throw new NotImplementedException();
+            return Falhas;
         }
 
         private void JogoDeveExistir(int idJogo)
