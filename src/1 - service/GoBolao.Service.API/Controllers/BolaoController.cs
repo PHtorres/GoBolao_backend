@@ -5,6 +5,7 @@ using GoBolao.Domain.Shared.DomainObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 
 namespace GoBolao.Service.API.Controllers
 {
@@ -29,9 +30,23 @@ namespace GoBolao.Service.API.Controllers
 
         [HttpGet]
         [Route("pesquisa/{pesquisa}")]
-        public ActionResult<Resposta<BolaoDTO>> GetPesquisa(string pesquisa)
+        public ActionResult<Resposta<IEnumerable<BolaoDTO>>> GetPesquisa(string pesquisa)
         {
             return Ok(ServicoBolao.PesquisarBoloes(pesquisa));
+        }
+
+        [HttpGet]
+        [Route("usuario")]
+        public ActionResult<Resposta<IEnumerable<BolaoDTO>>> GetDoUsuario()
+        {
+            return Ok(ServicoBolao.ObterBoloesDoUsuario(IdUsuarioAcao));
+        }
+
+        [HttpGet]
+        [Route("ranking/{idBolao}")]
+        public ActionResult<Resposta<RankingBolaoDTO>> GetRanking(int idBolao)
+        {
+            return Ok(ServicoBolao.ObterRankingBolao(idBolao));
         }
 
         [HttpPost]

@@ -1,4 +1,5 @@
-﻿using GoBolao.Domain.Core.DTO;
+﻿using Dapper;
+using GoBolao.Domain.Core.DTO;
 using GoBolao.Domain.Core.Entidades;
 using GoBolao.Domain.Core.Interfaces.Repository;
 using GoBolao.Domain.Usuarios.Entidades;
@@ -16,6 +17,7 @@ namespace GoBolao.Infra.Data.Repository
         private DbSet<Bolao> DbSetBolao;
         private DbSet<Usuario> DbSetUsuario;
         private DbSet<Campeonato> DbSetCampeonato;
+        private DbSet<BolaoUsuario> DbSetBolaoUsuario;
 
         public RepositoryBolao(ContextoMSSQL _sql) : base(_sql)
         {
@@ -23,6 +25,7 @@ namespace GoBolao.Infra.Data.Repository
             DbSetBolao = Sql.Set<Bolao>();
             DbSetUsuario = Sql.Set<Usuario>();
             DbSetCampeonato = Sql.Set<Campeonato>();
+            DbSetBolaoUsuario = Sql.Set<BolaoUsuario>();
         }
 
         public BolaoDTO ObterBolaoPorId(int idBolao)
@@ -83,6 +86,34 @@ namespace GoBolao.Infra.Data.Repository
                          }).AsEnumerable();
 
             return listaBolaoDTO;
+        }
+
+        public IEnumerable<ItemRankingBolaoDTO> ObterClassificacaoRankingBolao(int idBolao)
+        {
+            var query = @"SELECT 
+                          U.Apelido ApelidoUsuario,
+                          SUM(P.Pontos) Pontos,
+                          COUNT(P.Id) QuantidadePalpites
+                          FROM
+                          PALPITE P,
+                          BOLAO_USUARIO BU,
+                          USUARIO U,
+                          CAMPEONATO C,
+                          BOLAO B,
+                          JOGO J
+                          WHERE 
+                          P.IdUsuario = U.Id AND
+                          P.IdJogo = J.Id AND
+                          BU.IdUsuario = U.Id AND
+                          B.Id = BU.IdBolao AND
+                          B.IdCampeonato = C.Id AND
+                          J.IdCampeonato = C.Id AND
+                          BU.IdBolao = 1
+                          GROUP by p.IdUsuario, u.Apelido
+                          ORDER BY Pontos DESC, QuantidadePalpites ASC";
+
+            var classificacao = Sql.Database.GetDbConnection().Query<ItemRankingBolaoDTO>(query, new { IDBOLAO = idBolao });
+            return classificacao;
         }
     }
 }

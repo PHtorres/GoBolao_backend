@@ -69,9 +69,12 @@ namespace GoBolao.Domain.Core.Rules
         {
             var bolao = RepositorioBolao.Obter(idBolao);
 
-            if(bolao.Privacidade != Privacidade.Publico)
+            if(bolao != null)
             {
-                AdicionarFalha("Bolão não é público.");
+                if (bolao.Privacidade != Privacidade.Publico)
+                {
+                    AdicionarFalha("Bolão não é público.");
+                }
             }
         }
 
