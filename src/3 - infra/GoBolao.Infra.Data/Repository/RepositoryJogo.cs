@@ -39,7 +39,8 @@ namespace GoBolao.Infra.Data.Repository
                           JOGO J,
                           CAMPEONATO C
                           WHERE
-                          J.IdCampeonato = C.Id";
+                          J.IdCampeonato = C.Id and
+                          J.Finalizado = 0";
 
             var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARIO = idUsuario });
             return jogos;
@@ -64,7 +65,8 @@ namespace GoBolao.Infra.Data.Repository
                           CAMPEONATO C
                           WHERE
                           CONVERT(date, j.DataHora) = @DATA AND
-                          J.IdCampeonato = C.Id";
+                          J.IdCampeonato = C.Id AND
+                          J.Finalizado = 0";
 
             var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARIO = idUsuario, DATA = data.Date });
             return jogos;
