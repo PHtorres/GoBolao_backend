@@ -48,8 +48,9 @@ namespace GoBolao.Infra.Data.Repository
                                          Nome = b.Nome,
                                          NomeCampeonato = c.Nome,
                                          NomeCriador = b.NomeCriador,
-                                         NomeImagemAvatar = b.NomeImagemAvatar,
-                                         Privacidade = b.Privacidade
+                                         NomeImagemAvatarBolao = b.NomeImagemAvatar,
+                                         Privacidade = b.Privacidade,
+                                         NomeImagemAvatarCampeonato = c.NomeImagemAvatar
                                      }).FirstOrDefault();
 
             return bolaoDTO;
@@ -81,8 +82,9 @@ namespace GoBolao.Infra.Data.Repository
                              Nome = b.Nome,
                              NomeCampeonato = c.Nome,
                              NomeCriador = b.NomeCriador,
-                             NomeImagemAvatar = b.NomeImagemAvatar,
-                             Privacidade = b.Privacidade
+                             NomeImagemAvatarBolao = b.NomeImagemAvatar,
+                             Privacidade = b.Privacidade,
+                             NomeImagemAvatarCampeonato = c.NomeImagemAvatar
                          }).AsEnumerable();
 
             return listaBolaoDTO;
@@ -108,7 +110,9 @@ namespace GoBolao.Infra.Data.Repository
                           B.Id = BU.IdBolao AND
                           B.IdCampeonato = C.Id AND
                           J.IdCampeonato = C.Id AND
-                          BU.IdBolao = 1
+                          J.Finalizado = 1 AND
+                          P.Finalizado = 1 AND
+                          BU.IdBolao = @IDBOLAO
                           GROUP by p.IdUsuario, u.Apelido
                           ORDER BY Pontos DESC, QuantidadePalpites ASC";
 

@@ -15,7 +15,6 @@ namespace GoBolao.Domain.Core.Services
     {
         private readonly IRepositoryBolao RepositorioBolao;
         private readonly IRepositoryBolaoUsuario RepositorioBolaoUsuario;
-        private readonly IRepositoryPalpite RepositorioPalpite;
         private readonly IRepositoryCampeonato RepositorioCampeonato;
         private readonly IRulesBolao RulesBolao;
         private Resposta<Bolao> Resposta;
@@ -23,6 +22,7 @@ namespace GoBolao.Domain.Core.Services
         private Resposta<BolaoDTO> RespostaDTO;
         private Resposta<IEnumerable<BolaoDTO>> RespostaListaDTO;
         private Resposta<RankingBolaoDTO> RespostaRanking;
+        private Resposta<IEnumerable<RankingBolaoDTO>> RespostaListaRanking;
 
         public ServiceBolao(IRepositoryBolao repositorioBolao, IRulesBolao rulesBolao, IRepositoryBolaoUsuario repositorioBolaoUsuario, IRepositoryPalpite repositorioPalpite, IRepositoryCampeonato repositorioCampeonato)
         {
@@ -32,9 +32,9 @@ namespace GoBolao.Domain.Core.Services
             RespostaDTO = new Resposta<BolaoDTO>();
             RespostaListaDTO = new Resposta<IEnumerable<BolaoDTO>>();
             RespostaRanking = new Resposta<RankingBolaoDTO>();
+            RespostaListaRanking = new Resposta<IEnumerable<RankingBolaoDTO>>();
             RulesBolao = rulesBolao;
             RepositorioBolaoUsuario = repositorioBolaoUsuario;
-            RepositorioPalpite = repositorioPalpite;
             RepositorioCampeonato = repositorioCampeonato;
         }
 
@@ -122,6 +122,12 @@ namespace GoBolao.Domain.Core.Services
 
         public Resposta<RankingBolaoDTO> ObterRankingBolao(int idBolao)
         {
+            RespostaRanking.AdicionarConteudo(GerarRankingBolao(idBolao));
+            return RespostaRanking;
+        }
+
+        private RankingBolaoDTO GerarRankingBolao(int idBolao)
+        {
             var bolao = RepositorioBolao.Obter(idBolao);
             var campeonato = RepositorioCampeonato.Obter(bolao.IdCampeonato);
 
@@ -133,8 +139,7 @@ namespace GoBolao.Domain.Core.Services
                 NomeCampeonato = campeonato.Nome
             };
 
-            RespostaRanking.AdicionarConteudo(rankingBolao);
-            return RespostaRanking;
+            return rankingBolao;
         }
 
         public Resposta<BolaoUsuario> ParticiparDeBolaoPublico(ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO, int idUsuarioAcao)
@@ -182,6 +187,19 @@ namespace GoBolao.Domain.Core.Services
 
             RespostaBolaoUsuario.AdicionarConteudo(bolaoUsuario);
             return RespostaBolaoUsuario;
+        }
+
+        public Resposta<IEnumerable<RankingBolaoDTO>> ObterRankingsBoloesDoUsuario(int idUsuarioAcao)
+        {
+            var boloesUsuario = RepositorioBolaoUsuario.Listar().Where(bu => bu.IdUsuario == idUsuarioAcao);
+            var listaRankings = new List<RankingBolaoDTO>();
+            foreach(var bu in boloesUsuario)
+            {
+                listaRankings.Add(GerarRankingBolao(bu.IdBolao));
+            }
+
+            RespostaListaRanking.AdicionarConteudo(listaRankings);
+            return RespostaListaRanking;
         }
     }
 }

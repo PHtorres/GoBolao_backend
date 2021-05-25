@@ -49,6 +49,13 @@ namespace GoBolao.Service.API.Controllers
             return Ok(ServicoBolao.ObterRankingBolao(idBolao));
         }
 
+        [HttpGet]
+        [Route("ranking")]
+        public ActionResult<Resposta<IEnumerable<RankingBolaoDTO>>> GetRankingsUsuario()
+        {
+            return Ok(ServicoBolao.ObterRankingsBoloesDoUsuario(IdUsuarioAcao));
+        }
+
         [HttpPost]
         public ActionResult<Resposta<Bolao>> Post([FromBody] CriarBolaoDTO criarBolaoDTO)
         {
