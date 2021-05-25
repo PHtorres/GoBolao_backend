@@ -15,21 +15,27 @@ namespace GoBolao.Domain.Core.Services
     {
         private readonly IRepositoryBolao RepositorioBolao;
         private readonly IRepositoryBolaoUsuario RepositorioBolaoUsuario;
+        private readonly IRepositoryCampeonato RepositorioCampeonato;
         private readonly IRulesBolao RulesBolao;
         private Resposta<Bolao> Resposta;
         private Resposta<BolaoUsuario> RespostaBolaoUsuario;
         private Resposta<BolaoDTO> RespostaDTO;
         private Resposta<IEnumerable<BolaoDTO>> RespostaListaDTO;
+        private Resposta<RankingBolaoDTO> RespostaRanking;
+        private Resposta<IEnumerable<RankingBolaoDTO>> RespostaListaRanking;
 
-        public ServiceBolao(IRepositoryBolao repositorioBolao, IRulesBolao rulesBolao, IRepositoryBolaoUsuario repositorioBolaoUsuario)
+        public ServiceBolao(IRepositoryBolao repositorioBolao, IRulesBolao rulesBolao, IRepositoryBolaoUsuario repositorioBolaoUsuario, IRepositoryPalpite repositorioPalpite, IRepositoryCampeonato repositorioCampeonato)
         {
             RepositorioBolao = repositorioBolao;
             Resposta = new Resposta<Bolao>();
             RespostaBolaoUsuario = new Resposta<BolaoUsuario>();
             RespostaDTO = new Resposta<BolaoDTO>();
             RespostaListaDTO = new Resposta<IEnumerable<BolaoDTO>>();
+            RespostaRanking = new Resposta<RankingBolaoDTO>();
+            RespostaListaRanking = new Resposta<IEnumerable<RankingBolaoDTO>>();
             RulesBolao = rulesBolao;
             RepositorioBolaoUsuario = repositorioBolaoUsuario;
+            RepositorioCampeonato = repositorioCampeonato;
         }
 
         public Resposta<Bolao> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarBolaoDTO alterarNomeImagemAvatarBolaoDTO, int idUsuarioAcao)
@@ -100,6 +106,42 @@ namespace GoBolao.Domain.Core.Services
             return RespostaDTO;
         }
 
+        public Resposta<IEnumerable<BolaoDTO>> ObterBoloesDoUsuario(int idUsuario)
+        {
+            var boloesUsuario = RepositorioBolaoUsuario.Listar().Where(bu => bu.IdUsuario == idUsuario);
+            var boloes = new List<BolaoDTO>();
+
+            foreach(var bu in boloesUsuario)
+            {
+                boloes.Add(RepositorioBolao.ObterBolaoPorId(bu.IdBolao));
+            }
+
+            RespostaListaDTO.AdicionarConteudo(boloes);
+            return RespostaListaDTO;
+        }
+
+        public Resposta<RankingBolaoDTO> ObterRankingBolao(int idBolao)
+        {
+            RespostaRanking.AdicionarConteudo(GerarRankingBolao(idBolao));
+            return RespostaRanking;
+        }
+
+        private RankingBolaoDTO GerarRankingBolao(int idBolao)
+        {
+            var bolao = RepositorioBolao.Obter(idBolao);
+            var campeonato = RepositorioCampeonato.Obter(bolao.IdCampeonato);
+
+            var rankingBolao = new RankingBolaoDTO
+            {
+                Classificacao = RepositorioBolao.ObterClassificacaoRankingBolao(idBolao),
+                IdBolao = idBolao,
+                NomeBolao = bolao.Nome,
+                NomeCampeonato = campeonato.Nome
+            };
+
+            return rankingBolao;
+        }
+
         public Resposta<BolaoUsuario> ParticiparDeBolaoPublico(ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO, int idUsuarioAcao)
         {
             var bolaoUsuario = new BolaoUsuario(participarDeBolaoPublicoDTO.IdBolao, idUsuarioAcao);
@@ -145,6 +187,19 @@ namespace GoBolao.Domain.Core.Services
 
             RespostaBolaoUsuario.AdicionarConteudo(bolaoUsuario);
             return RespostaBolaoUsuario;
+        }
+
+        public Resposta<IEnumerable<RankingBolaoDTO>> ObterRankingsBoloesDoUsuario(int idUsuarioAcao)
+        {
+            var boloesUsuario = RepositorioBolaoUsuario.Listar().Where(bu => bu.IdUsuario == idUsuarioAcao);
+            var listaRankings = new List<RankingBolaoDTO>();
+            foreach(var bu in boloesUsuario)
+            {
+                listaRankings.Add(GerarRankingBolao(bu.IdBolao));
+            }
+
+            RespostaListaRanking.AdicionarConteudo(listaRankings);
+            return RespostaListaRanking;
         }
     }
 }

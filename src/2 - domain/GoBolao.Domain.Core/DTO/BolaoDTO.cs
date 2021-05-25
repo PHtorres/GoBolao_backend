@@ -11,7 +11,8 @@ namespace GoBolao.Domain.Core.DTO
         public string NomeCriador { get; set; }
         public string NomeCampeonato { get; set; }
         public string Privacidade { get; set; }
-        public string NomeImagemAvatar { get; set; }
+        public string NomeImagemAvatarBolao { get; set; }
+        public string NomeImagemAvatarCampeonato { get; set; }
         public bool SouCriadorBolao { get; set; }
     }
 }
