@@ -1,47 +1,60 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using GoBolao.Domain.Core.DTO;
+using GoBolao.Domain.Core.Entidades;
+using GoBolao.Domain.Core.Interfaces.Service;
+using GoBolao.Domain.Shared.DomainObjects;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
 namespace GoBolao.Service.API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1")]
     [ApiController]
-    public class BolaoSolicitacaoController : ControllerBase
+    [Authorize]
+    public class BolaoSolicitacaoController : SharedController
     {
-        // GET: api/<BolaoSolicitacaoController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly IServiceBolaoSolicitacao ServicoBolaoSolicitacao;
+        public BolaoSolicitacaoController(IHttpContextAccessor _httpContextAccessor, IServiceBolaoSolicitacao servicoBolaoSolicitacao) : base(_httpContextAccessor)
         {
-            return new string[] { "value1", "value2" };
+            ServicoBolaoSolicitacao = servicoBolaoSolicitacao;
         }
 
-        // GET api/<BolaoSolicitacaoController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+
+        [HttpGet("{idBolao}")]
+        public ActionResult<Resposta<IEnumerable<BolaoSolicitacaoDTO>>> Get(int idBolao)
         {
-            return "value";
+            return Ok(ServicoBolaoSolicitacao.ObterSolicitacoesPorBolao(idBolao, IdUsuarioAcao));
         }
 
-        // POST api/<BolaoSolicitacaoController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public ActionResult<Resposta<BolaoSolicitacao>> Post([FromBody] CriarBolaoSolicitacaoDTO criarBolaoSolicitacaoDTO)
         {
+            return Ok(ServicoBolaoSolicitacao.CriarSolicitacao(criarBolaoSolicitacaoDTO, IdUsuarioAcao));
         }
 
-        // PUT api/<BolaoSolicitacaoController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPatch]
+        [Route("aceitar")]
+        public ActionResult<Resposta<BolaoSolicitacao>> PatchAceitar([FromBody] AceitarBolaoSolicitacaoDTO aceitarBolaoSolicitacaoDTO)
         {
+            return Ok(ServicoBolaoSolicitacao.AceitarSolicitacao(aceitarBolaoSolicitacaoDTO, IdUsuarioAcao));
         }
 
-        // DELETE api/<BolaoSolicitacaoController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpPatch]
+        [Route("recusar")]
+        public ActionResult<Resposta<BolaoSolicitacao>> PatchRecusar([FromBody] RecusarBolaoSolicitacaoDTO recusarBolaoSolicitacaoDTO)
         {
+            return Ok(ServicoBolaoSolicitacao.RecusarSolicitacao(recusarBolaoSolicitacaoDTO, IdUsuarioAcao));
+        }
+
+        [HttpDelete("{idSolicitacao}")]
+        public ActionResult<Resposta<BolaoSolicitacao>> Delete(int idSolicitacao)
+        {
+            return Ok(ServicoBolaoSolicitacao.DesfazerSolicitacao(idSolicitacao, IdUsuarioAcao));
         }
     }
 }
