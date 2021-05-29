@@ -32,11 +32,11 @@ namespace GoBolao.Service.API.Controllers
         [Route("pesquisa/{pesquisa}")]
         public ActionResult<Resposta<IEnumerable<BolaoDTO>>> GetPesquisa(string pesquisa)
         {
-            return Ok(ServicoBolao.PesquisarBoloes(pesquisa));
+            return Ok(ServicoBolao.PesquisarBoloes(pesquisa, IdUsuarioAcao));
         }
 
         [HttpGet]
-        [Route("usuario")]
+        [Route("meus")]
         public ActionResult<Resposta<IEnumerable<BolaoDTO>>> GetDoUsuario()
         {
             return Ok(ServicoBolao.ObterBoloesDoUsuario(IdUsuarioAcao));

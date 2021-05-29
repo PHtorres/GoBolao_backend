@@ -28,30 +28,30 @@ namespace GoBolao.Infra.Data.Repository
             DbSetBolaoUsuario = Sql.Set<BolaoUsuario>();
         }
 
-        public BolaoDTO ObterBolaoPorId(int idBolao)
+        public BolaoDTO ObterBolaoPorId(int idBolao, int idUsuario)
         {
-            var bolaoDTO = DbSetBolao.Where(bolao => bolao.Id == idBolao)
-                                     .Join(DbSetUsuario, b => b.IdCriador, u => u.Id,
-                                     (b, u) => new
-                                     {
-                                         IdBolao = b.Id,
-                                         IdCampeonato = b.IdCampeonato,
-                                         Nome = b.Nome,
-                                         NomeCriador = u.Apelido,
-                                         NomeImagemAvatar = b.NomeImagemAvatar,
-                                         Privacidade = b.Privacidade.ToString()
-                                     })
-                                     .Join(DbSetCampeonato, b => b.IdCampeonato, c => c.Id,
-                                     (b, c) => new BolaoDTO
-                                     {
-                                         IdBolao = b.IdBolao,
-                                         Nome = b.Nome,
-                                         NomeCampeonato = c.Nome,
-                                         NomeCriador = b.NomeCriador,
-                                         NomeImagemAvatarBolao = b.NomeImagemAvatar,
-                                         Privacidade = b.Privacidade,
-                                         NomeImagemAvatarCampeonato = c.NomeImagemAvatar
-                                     }).FirstOrDefault();
+
+            var query = @"SELECT 
+                          B.Id IdBolao,
+                          B.Nome Nome,
+                          U.Apelido NomeCriador,
+                          C.Nome NomeCampeonato,
+                          (case when B.Privacidade = 1 then 'Privado' else 'Publico' end) Privacidade,
+                          B.NomeImagemAvatar NomeImagemAvatarBolao,
+                          c.NomeImagemAvatar NomeImagemAvatarCampeonato,
+                          (case when @IDUSUARIO = B.IdCriador then 1 else 0 end) SouCriadorBolao,
+                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO) > 0 then 1 else 0 end) PaticipoBolao
+                          FROM 
+                          BOLAO B,
+                          USUARIO U,
+                          CAMPEONATO C
+                          WHERE
+                          B.IdCriador = U.Id AND
+                          B.IdCampeonato = C.Id AND
+                          B.Id = @IDBOLAO";
+
+            var bolaoDTO = Sql.Database.GetDbConnection().Query<BolaoDTO>(query, new { IDBOLAO = idBolao, IDUSUARIO = idUsuario }).FirstOrDefault();
+            Sql.Dispose();
 
             return bolaoDTO;
         }
@@ -62,30 +62,57 @@ namespace GoBolao.Infra.Data.Repository
             return boloes;
         }
 
-        public IEnumerable<BolaoDTO> ObterBoloesPesquisa(string pesquisa)
+        public IEnumerable<BolaoDTO> ObterBoloesPesquisa(string pesquisa, int idUsuario)
         {
-            var listaBolaoDTO = DbSetBolao.Where(bolao => bolao.Nome.Contains(pesquisa))
-                         .Join(DbSetUsuario, b => b.IdCriador, u => u.Id,
-                         (b, u) => new
-                         {
-                             IdBolao = b.Id,
-                             IdCampeonato = b.IdCampeonato,
-                             Nome = b.Nome,
-                             NomeCriador = u.Apelido,
-                             NomeImagemAvatar = b.NomeImagemAvatar,
-                             Privacidade = b.Privacidade.ToString()
-                         })
-                         .Join(DbSetCampeonato, b => b.IdCampeonato, c => c.Id,
-                         (b, c) => new BolaoDTO
-                         {
-                             IdBolao = b.IdBolao,
-                             Nome = b.Nome,
-                             NomeCampeonato = c.Nome,
-                             NomeCriador = b.NomeCriador,
-                             NomeImagemAvatarBolao = b.NomeImagemAvatar,
-                             Privacidade = b.Privacidade,
-                             NomeImagemAvatarCampeonato = c.NomeImagemAvatar
-                         }).AsEnumerable();
+
+            var query = @"SELECT 
+                          B.Id IdBolao,
+                          B.Nome Nome,
+                          U.Apelido NomeCriador,
+                          C.Nome NomeCampeonato,
+                          (case when B.Privacidade = 1 then 'Privado' else 'Publico' end) Privacidade,
+                          B.NomeImagemAvatar NomeImagemAvatarBolao,
+                          c.NomeImagemAvatar NomeImagemAvatarCampeonato,
+                          (case when @IDUSUARIO = B.IdCriador then 1 else 0 end) SouCriadorBolao,
+                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO) > 0 then 1 else 0 end) PaticipoBolao
+                          FROM 
+                          BOLAO B,
+                          USUARIO U,
+                          CAMPEONATO C
+                          WHERE
+                          B.IdCriador = U.Id AND
+                          B.IdCampeonato = C.Id AND
+                          B.Nome LIKE '%' + @PESQUISA + '%'";
+
+            var listaBolaoDTO = Sql.Database.GetDbConnection().Query<BolaoDTO>(query, new { PESQUISA = pesquisa, IDUSUARIO = idUsuario });
+
+            return listaBolaoDTO;
+        }
+
+        public IEnumerable<BolaoDTO> ObterBoloesUsuario(int idUsuario)
+        {
+            var query = @"SELECT 
+                          B.Id IdBolao,
+                          B.Nome Nome,
+                          U.Apelido NomeCriador,
+                          C.Nome NomeCampeonato,
+                          (case when B.Privacidade = 1 then 'Privado' else 'Publico' end) Privacidade,
+                          B.NomeImagemAvatar NomeImagemAvatarBolao,
+                          c.NomeImagemAvatar NomeImagemAvatarCampeonato,
+                          (case when @IDUSUARIO = B.IdCriador then 1 else 0 end) SouCriadorBolao,
+                          1 PaticipoBolao
+                          FROM 
+                          BOLAO B,
+                          USUARIO U,
+                          CAMPEONATO C,
+                          BOLAO_USUARIO BU
+                          WHERE
+                          B.IdCriador = U.Id AND
+                          B.IdCampeonato = C.Id AND
+                          B.Id = BU.IdBolao AND
+                          BU.IdUsuario = @IDUSUARIO";
+
+            var listaBolaoDTO = Sql.Database.GetDbConnection().Query<BolaoDTO>(query, new { IDUSUARIO = idUsuario });
 
             return listaBolaoDTO;
         }
