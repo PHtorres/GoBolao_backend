@@ -12,10 +12,10 @@ namespace GoBolao.Domain.Core.Interfaces.Service
         Resposta<Bolao> CriarBolao(CriarBolaoDTO criarBolaoDTO, int idUsuarioAcao);
         Resposta<Bolao> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarBolaoDTO alterarNomeImagemAvatarBolaoDTO, int idUsuarioAcao);
         Resposta<BolaoDTO> ObterBolaoPorId(int idBolao, int idUsuarioAcao);
-        Resposta<IEnumerable<BolaoDTO>> PesquisarBoloes(string pesquisa);
+        Resposta<IEnumerable<BolaoDTO>> PesquisarBoloes(string pesquisa, int idUsuarioAcao);
         Resposta<BolaoUsuario> ParticiparDeBolaoPublico(ParticiparDeBolaoPublicoDTO participarDeBolaoPublicoDTO, int idUsuarioAcao);
         Resposta<BolaoUsuario> SairDeBolao(int idBolao, int idUsuarioAcao);
-        Resposta<IEnumerable<BolaoDTO>> ObterBoloesDoUsuario(int idUsuario);
+        Resposta<IEnumerable<BolaoDTO>> ObterBoloesDoUsuario(int idUsuarioAcao);
         Resposta<RankingBolaoDTO> ObterRankingBolao(int idBolao);
         Resposta<IEnumerable<RankingBolaoDTO>> ObterRankingsBoloesDoUsuario(int idUsuarioAcao);
     }

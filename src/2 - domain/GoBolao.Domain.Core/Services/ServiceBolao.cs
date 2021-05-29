@@ -38,6 +38,14 @@ namespace GoBolao.Domain.Core.Services
             RepositorioCampeonato = repositorioCampeonato;
         }
 
+        public void Dispose()
+        {
+            RepositorioBolao.Dispose();
+            RepositorioBolaoUsuario.Dispose();
+            RulesBolao.Dispose();
+            GC.SuppressFinalize(this);
+        }
+
         public Resposta<Bolao> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarBolaoDTO alterarNomeImagemAvatarBolaoDTO, int idUsuarioAcao)
         {
             var bolao = RepositorioBolao.Obter(alterarNomeImagemAvatarBolaoDTO.IdBolao);
@@ -83,17 +91,10 @@ namespace GoBolao.Domain.Core.Services
             return Resposta;
         }
 
-        public void Dispose()
-        {
-            RepositorioBolao.Dispose();
-            RepositorioBolaoUsuario.Dispose();
-            RulesBolao.Dispose();
-            GC.SuppressFinalize(this);
-        }
 
         public Resposta<BolaoDTO> ObterBolaoPorId(int idBolao, int idUsuarioAcao)
         {
-            var bolaoDTO = RepositorioBolao.ObterBolaoPorId(idBolao);
+            var bolaoDTO = RepositorioBolao.ObterBolaoPorId(idBolao, idUsuarioAcao);
             if (bolaoDTO == null)
             {
                 RespostaDTO.AdicionarNotificacao("Bolao nao encontrado.");
@@ -106,17 +107,9 @@ namespace GoBolao.Domain.Core.Services
             return RespostaDTO;
         }
 
-        public Resposta<IEnumerable<BolaoDTO>> ObterBoloesDoUsuario(int idUsuario)
+        public Resposta<IEnumerable<BolaoDTO>> ObterBoloesDoUsuario(int idUsuarioAcao)
         {
-            var boloesUsuario = RepositorioBolaoUsuario.Listar().Where(bu => bu.IdUsuario == idUsuario);
-            var boloes = new List<BolaoDTO>();
-
-            foreach(var bu in boloesUsuario)
-            {
-                boloes.Add(RepositorioBolao.ObterBolaoPorId(bu.IdBolao));
-            }
-
-            RespostaListaDTO.AdicionarConteudo(boloes);
+            RespostaListaDTO.AdicionarConteudo(RepositorioBolao.ObterBoloesUsuario(idUsuarioAcao));
             return RespostaListaDTO;
         }
 
@@ -165,9 +158,9 @@ namespace GoBolao.Domain.Core.Services
             return RespostaBolaoUsuario;
         }
 
-        public Resposta<IEnumerable<BolaoDTO>> PesquisarBoloes(string pesquisa)
+        public Resposta<IEnumerable<BolaoDTO>> PesquisarBoloes(string pesquisa, int IdUsuarioAcao)
         {
-            var resultadoPesquisa = RepositorioBolao.ObterBoloesPesquisa(pesquisa);
+            var resultadoPesquisa = RepositorioBolao.ObterBoloesPesquisa(pesquisa, IdUsuarioAcao);
             RespostaListaDTO.AdicionarConteudo(resultadoPesquisa);
             return RespostaListaDTO;
         }
