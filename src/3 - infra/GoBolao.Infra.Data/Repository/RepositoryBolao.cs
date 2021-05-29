@@ -51,7 +51,6 @@ namespace GoBolao.Infra.Data.Repository
                           B.Id = @IDBOLAO";
 
             var bolaoDTO = Sql.Database.GetDbConnection().Query<BolaoDTO>(query, new { IDBOLAO = idBolao, IDUSUARIO = idUsuario }).FirstOrDefault();
-            Sql.Dispose();
 
             return bolaoDTO;
         }
