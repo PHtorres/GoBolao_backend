@@ -101,8 +101,6 @@ namespace GoBolao.Domain.Core.Services
                 return RespostaDTO;
             }
 
-            bolaoDTO.SouCriadorBolao = RepositorioBolao.Obter(idBolao).IdCriador == idUsuarioAcao;
-
             RespostaDTO.AdicionarConteudo(bolaoDTO);
             return RespostaDTO;
         }
