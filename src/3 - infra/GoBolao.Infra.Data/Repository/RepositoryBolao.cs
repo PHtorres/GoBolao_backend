@@ -40,7 +40,7 @@ namespace GoBolao.Infra.Data.Repository
                           B.NomeImagemAvatar NomeImagemAvatarBolao,
                           c.NomeImagemAvatar NomeImagemAvatarCampeonato,
                           (case when @IDUSUARIO = B.IdCriador then 1 else 0 end) SouCriadorBolao,
-                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO) > 0 then 1 else 0 end) PaticipoBolao
+                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO AND BU.IdBolao = B.Id) > 0 then 1 else 0 end) PaticipoBolao
                           FROM 
                           BOLAO B,
                           USUARIO U,
@@ -73,7 +73,7 @@ namespace GoBolao.Infra.Data.Repository
                           B.NomeImagemAvatar NomeImagemAvatarBolao,
                           c.NomeImagemAvatar NomeImagemAvatarCampeonato,
                           (case when @IDUSUARIO = B.IdCriador then 1 else 0 end) SouCriadorBolao,
-                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO) > 0 then 1 else 0 end) PaticipoBolao
+                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO AND BU.IdBolao = B.Id) > 0 then 1 else 0 end) PaticipoBolao
                           FROM 
                           BOLAO B,
                           USUARIO U,
