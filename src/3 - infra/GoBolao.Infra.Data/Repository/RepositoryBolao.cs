@@ -28,6 +28,27 @@ namespace GoBolao.Infra.Data.Repository
             DbSetBolaoUsuario = Sql.Set<BolaoUsuario>();
         }
 
+        public IEnumerable<MembroBolaoDTO> ObterAdiversariosBoloes(int idMembroBolao)
+        {
+            var query = @"SELECT
+                           U.Id IdMembro,
+                           U.Apelido NomeMembro
+                           FROM
+                           BOLAO B,
+                           BOLAO_USUARIO BU,
+                           USUARIO U
+                           WHERE
+                           U.Id = BU.IdUsuario AND
+                           B.Id = BU.IdBolao AND
+                           BU.IdBolao IN (SELECT IdBolao FROM BOLAO_USUARIO BU2 WHERE BU2.IdUsuario = @IDUSUARIO)
+                           GROUP BY U.Id, U.Apelido";
+
+
+            var membros = Sql.Database.GetDbConnection().Query<MembroBolaoDTO>(query, new { IDUSUARIO = idMembroBolao });
+
+            return membros;
+        }
+
         public BolaoDTO ObterBolaoPorId(int idBolao, int idUsuario)
         {
 
