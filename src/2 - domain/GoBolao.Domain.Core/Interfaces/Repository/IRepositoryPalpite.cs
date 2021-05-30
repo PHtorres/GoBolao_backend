@@ -11,5 +11,6 @@ namespace GoBolao.Domain.Core.Interfaces.Repository
     {
         IEnumerable<PalpiteDTO> ObterPalpitesPorUsuario(int idUsuario);
         IEnumerable<Palpite> ObterPalpitesPorJogo(int idJogo);
+        IEnumerable<PalpiteDTO> ObterPalpitesPorJogoDTO(int idJogo);
     }
 }

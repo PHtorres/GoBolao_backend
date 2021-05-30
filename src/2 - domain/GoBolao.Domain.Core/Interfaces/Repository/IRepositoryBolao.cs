@@ -14,5 +14,6 @@ namespace GoBolao.Domain.Core.Interfaces.Repository
         IEnumerable<BolaoDTO> ObterBoloesUsuario(int idUsuario);
         IEnumerable<Bolao> ObterBoloesPeloNome(string nome);
         IEnumerable<ItemRankingBolaoDTO> ObterClassificacaoRankingBolao(int idBolao);
+        IEnumerable<MembroBolaoDTO> ObterAdiversariosBoloes(int idMembroBolao);
     }
 }

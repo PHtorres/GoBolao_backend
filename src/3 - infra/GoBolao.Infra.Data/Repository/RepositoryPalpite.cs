@@ -22,20 +22,23 @@ namespace GoBolao.Infra.Data.Repository
 
         public IEnumerable<Palpite> ObterPalpitesPorJogo(int idJogo)
         {
-            var palpites = DbSetPalpite.Where(p => p.IdJogo == idJogo).AsEnumerable();
+            var palpites = DbSetPalpite.Where(p => p.IdJogo == idJogo);
             return palpites;
         }
 
-        public IEnumerable<PalpiteDTO> ObterPalpitesPorUsuario(int idUsuario)
+        public IEnumerable<PalpiteDTO> ObterPalpitesPorJogoDTO(int idJogo)
         {
             var query = @"SELECT
                          p.Id,
                          j.Id IdJogo,
+                         U.Id IdUsuarioPalpite,
+                         U.Apelido NomeUsuarioPalpite,
                          (SELECT NOME FROM TIME T WHERE T.Id = J.IdMandante) Mandante,
                          (SELECT NOME FROM TIME T WHERE T.Id = J.IdVisitante) Visitante,
                          (SELECT NomeImagemAvatar FROM TIME T WHERE T.Id = J.IdMandante) NomeImagemAvatarMandante,
                          (SELECT NomeImagemAvatar FROM TIME T WHERE T.Id = J.IdVisitante) NomeImagemAvatarVisitante,
-                         p.DataHora,
+                         p.DataHora DataHoraPalpite,
+                         j.DataHora DataHoraJogo,
                          p.PlacarMandantePalpite,
                          p.PlacarVisitantePalpite,
                          J.PlacarMandante PlacarMandanteReal,
@@ -44,10 +47,45 @@ namespace GoBolao.Infra.Data.Repository
                          p.Finalizado
                          FROM
                          PALPITE P,
-                         JOGO J
+                         JOGO J,
+                         USUARIO U
+                         WHERE 
+                         P.IdJogo = J.Id AND
+                         P.IdUsuario = U.Id AND
+                         P.IdJogo = @IDJOGO
+                         ORDER BY p.DataHora DESC";
+
+            var palpites = Sql.Database.GetDbConnection().Query<PalpiteDTO>(query, new { IDJOGO = idJogo });
+            return palpites;
+        }
+
+        public IEnumerable<PalpiteDTO> ObterPalpitesPorUsuario(int idUsuario)
+        {
+            var query = @"SELECT
+                         p.Id,
+                         j.Id IdJogo,
+                         U.Id IdUsuarioPalpite,
+                         U.Apelido NomeUsuarioPalpite,
+                         (SELECT NOME FROM TIME T WHERE T.Id = J.IdMandante) Mandante,
+                         (SELECT NOME FROM TIME T WHERE T.Id = J.IdVisitante) Visitante,
+                         (SELECT NomeImagemAvatar FROM TIME T WHERE T.Id = J.IdMandante) NomeImagemAvatarMandante,
+                         (SELECT NomeImagemAvatar FROM TIME T WHERE T.Id = J.IdVisitante) NomeImagemAvatarVisitante,
+                         p.DataHora DataHoraPalpite,
+                         j.DataHora DataHoraJogo,
+                         p.PlacarMandantePalpite,
+                         p.PlacarVisitantePalpite,
+                         J.PlacarMandante PlacarMandanteReal,
+                         J.PlacarVisitante PlacarVisitanteReal,
+                         p.Pontos,
+                         p.Finalizado
+                         FROM
+                         PALPITE P,
+                         JOGO J,
+                         USUARIO U
                          WHERE 
                          P.IdUsuario = @ID_USUARIO AND
-                         P.IdJogo = J.Id
+                         P.IdJogo = J.Id AND
+                         P.IdUsuario = U.Id
                          ORDER BY p.DataHora DESC";
 
             var palpites = Sql.Database.GetDbConnection().Query<PalpiteDTO>(query, new { ID_USUARIO = idUsuario });

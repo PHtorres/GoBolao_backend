@@ -25,9 +25,24 @@ namespace GoBolao.Service.API.Controllers
         }
 
         [HttpGet]
-        public ActionResult<Resposta<IEnumerable<PalpiteDTO>>> Get()
+        [Route("abertos")]
+        public ActionResult<Resposta<IEnumerable<PalpiteDTO>>> GetAbertos()
         {
-            return Ok(ServicoPalpite.ObterPalpitesPorUsuario(IdUsuarioAcao));
+            return Ok(ServicoPalpite.ObterPalpitesAbertosPorUsuario(IdUsuarioAcao));
+        }
+
+        [HttpGet]
+        [Route("finalizados")]
+        public ActionResult<Resposta<IEnumerable<PalpiteDTO>>> GetFinalizados()
+        {
+            return Ok(ServicoPalpite.ObterPalpitesFinalizadosPorUsuario(IdUsuarioAcao));
+        }
+
+        [HttpGet]
+        [Route("jogo/{idJogo}")]
+        public ActionResult<Resposta<IEnumerable<PalpiteDTO>>> GetPorJogo(int idJogo)
+        {
+            return Ok(ServicoPalpite.ObterPalpitesPorJogoFinalizadoOuIniciadoDosAdiversarios(idJogo, IdUsuarioAcao));
         }
 
         [HttpPost]

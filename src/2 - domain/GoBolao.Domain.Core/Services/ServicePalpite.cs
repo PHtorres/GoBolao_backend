@@ -6,6 +6,7 @@ using GoBolao.Domain.Core.Interfaces.Service;
 using GoBolao.Domain.Shared.DomainObjects;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GoBolao.Domain.Core.Services
@@ -13,16 +14,18 @@ namespace GoBolao.Domain.Core.Services
     public class ServicePalpite : IServicePalpite
     {
         private readonly IRepositoryPalpite RepositorioPalpite;
+        private readonly IRepositoryBolao RepositorioBolao;
         private readonly IRulesPalpite RulesPalpite;
         private Resposta<Palpite> Resposta;
         private Resposta<IEnumerable<PalpiteDTO>> RespostaListaDTO;
 
-        public ServicePalpite(IRepositoryPalpite repositorioPalpite, IRulesPalpite rulesPalpite)
+        public ServicePalpite(IRepositoryPalpite repositorioPalpite, IRulesPalpite rulesPalpite, IRepositoryBolao repositorioBolao)
         {
             RepositorioPalpite = repositorioPalpite;
             Resposta = new Resposta<Palpite>();
             RespostaListaDTO = new Resposta<IEnumerable<PalpiteDTO>>();
             RulesPalpite = rulesPalpite;
+            RepositorioBolao = repositorioBolao;
         }
 
         public Resposta<Palpite> CriarPalpite(CriarPalpiteDTO criarPalpiteDTO, int idUsuarioAcao)
@@ -51,13 +54,30 @@ namespace GoBolao.Domain.Core.Services
         {
             RepositorioPalpite.Dispose();
             RulesPalpite.Dispose();
+            RepositorioBolao.Dispose();
             GC.SuppressFinalize(this);
         }
 
-        public Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesPorUsuario(int idUsuario)
+        public Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesAbertosPorUsuario(int idUsuarioAcao)
         {
-            var palpites = RepositorioPalpite.ObterPalpitesPorUsuario(idUsuario);
-            RespostaListaDTO.AdicionarConteudo(palpites);
+            var palpitesAbertos = RepositorioPalpite.ObterPalpitesPorUsuario(idUsuarioAcao).Where(p => p.Finalizado == false);
+            RespostaListaDTO.AdicionarConteudo(palpitesAbertos);
+            return RespostaListaDTO;
+        }
+
+        public Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesFinalizadosPorUsuario(int idUsuarioAcao)
+        {
+            var palpitesFinalizados = RepositorioPalpite.ObterPalpitesPorUsuario(idUsuarioAcao).Where(p => p.Finalizado == true);
+            RespostaListaDTO.AdicionarConteudo(palpitesFinalizados);
+            return RespostaListaDTO;
+        }
+
+        public Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesPorJogoFinalizadoOuIniciadoDosAdiversarios(int idJogo, int idUsuarioAcao)
+        {
+            var palpitesDoJogo = RepositorioPalpite.ObterPalpitesPorJogoDTO(idJogo).Where(p => p.Finalizado == true || p.DataHoraJogo < DateTime.Now);
+            var adversariosBoloes = RepositorioBolao.ObterAdiversariosBoloes(idUsuarioAcao);
+            var palpitesDoJogoDosAdiversarios = palpitesDoJogo.Where(p => adversariosBoloes.Where(a => a.IdMembro == p.IdUsuarioPalpite).Any());
+            RespostaListaDTO.AdicionarConteudo(palpitesDoJogoDosAdiversarios);
             return RespostaListaDTO;
         }
 
