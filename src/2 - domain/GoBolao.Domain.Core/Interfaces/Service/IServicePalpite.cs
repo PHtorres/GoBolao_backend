@@ -11,6 +11,8 @@ namespace GoBolao.Domain.Core.Interfaces.Service
     {
         Resposta<Palpite> CriarPalpite(CriarPalpiteDTO criarPalpiteDTO, int idUsuarioAcao);
         Resposta<Palpite> RemoverPalpite(int idPalpite, int idUsuarioAcao);
-        Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesPorUsuario(int idUsuario);
+        Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesAbertosPorUsuario(int idUsuarioAcao);
+        Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesFinalizadosPorUsuario(int idUsuarioAcao);
+        Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesPorJogoFinalizadoOuIniciadoDosAdiversarios(int idJogo, int idUsuarioAcao);
     }
 }
