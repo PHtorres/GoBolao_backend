@@ -23,7 +23,7 @@ namespace GoBolao.Infra.Data.Repository
 
         public IEnumerable<JogoDTO> ObterJogos(int idUsuario)
         {
-            var query = @"SELECT 
+            var query = $@"SELECT 
                           J.Id,
                           C.Nome NomeCampeonato,
                           j.DataHora,
@@ -34,13 +34,15 @@ namespace GoBolao.Infra.Data.Repository
                           j.PlacarMandante,
                           j.PlacarVisitante,
                           j.Fase,
-                          (SELECT 1 FROM PALPITE P WHERE p.IdJogo = j.Id and p.IdUsuario = @ID_USUARIO) UsuarioTemPalpite
+                          (SELECT 1 FROM PALPITE P WHERE p.IdJogo = j.Id and p.IdUsuario = @ID_USUARIO) UsuarioTemPalpite,
+                          (CASE WHEN j.DataHora < '{DateTime.Now:yyyyMMdd HH:mm}' THEN 1 ELSE 0 END) JogoIniciado
                           FROM
                           JOGO J,
                           CAMPEONATO C
                           WHERE
                           J.IdCampeonato = C.Id and
-                          J.Finalizado = 0";
+                          J.Finalizado = 0
+                          ORDER BY J.DataHora ASC";
 
             var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARIO = idUsuario });
             return jogos;
@@ -48,7 +50,7 @@ namespace GoBolao.Infra.Data.Repository
 
         public IEnumerable<JogoDTO> ObterJogosNaData(DateTime data, int idUsuario)
         {
-            var query = @"SELECT
+            var query = $@"SELECT
                           J.Id,
                           C.Nome NomeCampeonato,
                           j.DataHora,
@@ -59,14 +61,16 @@ namespace GoBolao.Infra.Data.Repository
                           j.PlacarMandante,
                           j.PlacarVisitante,
                           j.Fase,
-                          (SELECT 1 FROM PALPITE P WHERE p.IdJogo = j.Id and p.IdUsuario = @ID_USUARIO) UsuarioTemPalpite
+                          (SELECT 1 FROM PALPITE P WHERE p.IdJogo = j.Id and p.IdUsuario = @ID_USUARIO) UsuarioTemPalpite,
+                          (CASE WHEN j.DataHora < '{DateTime.Now:yyyyMMdd HH:mm}' THEN 1 ELSE 0 END) JogoIniciado
                           FROM
                           JOGO J,
                           CAMPEONATO C
                           WHERE
                           CONVERT(date, j.DataHora) = @DATA AND
                           J.IdCampeonato = C.Id AND
-                          J.Finalizado = 0";
+                          J.Finalizado = 0
+                          ORDER BY J.DataHora ASC";
 
             var jogos = Sql.Database.GetDbConnection().Query<JogoDTO>(query, new { ID_USUARIO = idUsuario, DATA = data.Date });
             return jogos;
