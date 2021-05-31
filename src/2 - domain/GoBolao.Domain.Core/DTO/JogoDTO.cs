@@ -17,5 +17,6 @@ namespace GoBolao.Domain.Core.DTO
 		public int PlacarVisitante { get; set; }
 		public string Fase { get; set; }
 		public bool UsuarioTemPalpite { get; set; }
+		public bool JogoIniciado { get; set; }
 	}
 }
