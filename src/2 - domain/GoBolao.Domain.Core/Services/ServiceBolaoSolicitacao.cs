@@ -25,6 +25,7 @@ namespace GoBolao.Domain.Core.Services
             RepositorioBolaoSolicitacao = repositorioBolaoSolicitacao;
             RepositorioBolaoUsuario = repositorioBolaoUsuario;
             Resposta = new Resposta<BolaoSolicitacao>();
+            RespostaListaDTO = new Resposta<IEnumerable<BolaoSolicitacaoDTO>>();
             RulesBolaoSolicitacao = rulesBolaoSolicitacao;
         }
 
