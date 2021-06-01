@@ -1,6 +1,7 @@
 ﻿using GoBolao.Domain.Core.DTO;
 using GoBolao.Domain.Core.Interfaces.Repository;
 using GoBolao.Domain.Core.Interfaces.Rules;
+using GoBolao.Domain.Core.ValueObjects;
 using GoBolao.Domain.Shared.Rules;
 using System;
 using System.Collections.Generic;
@@ -32,6 +33,7 @@ namespace GoBolao.Domain.Core.Rules
         public bool AptoParaCriarSolicitacao(CriarBolaoSolicitacaoDTO criarBolaoSolicitacaoDTO, int idUsuarioAcao)
         {
             UsuarioSolicitanteNaoDeveEstarParticipandoDoBolao(criarBolaoSolicitacaoDTO.IdBolao, idUsuarioAcao);
+            UsuarioSolicitanteNaoDeveTerSolicitacaoAbertaComOBolao(criarBolaoSolicitacaoDTO.IdBolao, idUsuarioAcao);
             return SemFalhas;
         }
 
@@ -111,6 +113,16 @@ namespace GoBolao.Domain.Core.Rules
                 {
                     AdicionarFalha("Usuário solicitante já está participando do bolão.");
                 }
+            }
+        }
+
+        private void UsuarioSolicitanteNaoDeveTerSolicitacaoAbertaComOBolao(int idBolao, int idUsuarioSolicitante)
+        {
+            var solicitacoesUsuarioAbertas = RepositorioBolaoSolicitacao.Listar()
+                .Where(bs => bs.IdBolao == idBolao && bs.IdUsuarioSolicitante == idUsuarioSolicitante && bs.Status == StatusBolaoSolicitacao.Aberta);
+            if (solicitacoesUsuarioAbertas.Any())
+            {
+                AdicionarFalha("Já existe solicitação aberta para este bolão. Aguarde resposta do criador do bolão");
             }
         }
 
