@@ -126,7 +126,7 @@ namespace GoBolao.Domain.Usuarios.Services
 
         public Resposta<UsuarioDTO> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarDTO alterarNomeImagemAvatarDTO, int idUsuarioAcao)
         {
-            var usuario = RepositorioUsuario.Obter(alterarNomeImagemAvatarDTO.IdUsuario);
+            var usuario = RepositorioUsuario.Obter(idUsuarioAcao);
             usuario.AlterarNomeImagemAvatar(alterarNomeImagemAvatarDTO.NomeImagemAvatar);
             if (usuario.Invalido)
             {

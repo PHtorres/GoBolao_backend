@@ -61,7 +61,8 @@ namespace GoBolao.Infra.Data.Repository
                           B.NomeImagemAvatar NomeImagemAvatarBolao,
                           c.NomeImagemAvatar NomeImagemAvatarCampeonato,
                           (case when @IDUSUARIO = B.IdCriador then 1 else 0 end) SouCriadorBolao,
-                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO AND BU.IdBolao = B.Id) > 0 then 1 else 0 end) PaticipoBolao
+                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO AND BU.IdBolao = B.Id) > 0 then 1 else 0 end) PaticipoBolao,
+                          (SELECT COUNT(*) FROM BOLAO_SOLICITACAO BS WHERE BS.IdBolao = B.Id AND BS.Status = 0) QuantidadeSolicitacoesAbertas
                           FROM 
                           BOLAO B,
                           USUARIO U,
@@ -94,7 +95,8 @@ namespace GoBolao.Infra.Data.Repository
                           B.NomeImagemAvatar NomeImagemAvatarBolao,
                           c.NomeImagemAvatar NomeImagemAvatarCampeonato,
                           (case when @IDUSUARIO = B.IdCriador then 1 else 0 end) SouCriadorBolao,
-                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO AND BU.IdBolao = B.Id) > 0 then 1 else 0 end) PaticipoBolao
+                          (case when (SELECT COUNT(*) FROM BOLAO_USUARIO BU WHERE BU.IdUsuario = @IDUSUARIO AND BU.IdBolao = B.Id) > 0 then 1 else 0 end) PaticipoBolao,
+                          (SELECT COUNT(*) FROM BOLAO_SOLICITACAO BS WHERE BS.IdBolao = B.Id AND BS.Status = 0) QuantidadeSolicitacoesAbertas
                           FROM 
                           BOLAO B,
                           USUARIO U,
@@ -141,6 +143,7 @@ namespace GoBolao.Infra.Data.Repository
         {
             var query = @"SELECT 
                           U.Apelido ApelidoUsuario,
+                          U.NomeImagemAvatar NomeImagemAvatarUsuario,
                           SUM(P.Pontos) Pontos,
                           COUNT(P.Id) QuantidadePalpites
                           FROM
@@ -160,7 +163,7 @@ namespace GoBolao.Infra.Data.Repository
                           J.Finalizado = 1 AND
                           P.Finalizado = 1 AND
                           BU.IdBolao = @IDBOLAO
-                          GROUP by p.IdUsuario, u.Apelido
+                          GROUP by p.IdUsuario, u.Apelido, u.NomeImagemAvatar
                           ORDER BY Pontos DESC, QuantidadePalpites ASC";
 
             var classificacao = Sql.Database.GetDbConnection().Query<ItemRankingBolaoDTO>(query, new { IDBOLAO = idBolao });
