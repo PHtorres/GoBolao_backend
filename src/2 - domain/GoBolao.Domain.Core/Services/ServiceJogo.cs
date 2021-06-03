@@ -126,9 +126,16 @@ namespace GoBolao.Domain.Core.Services
 
         }
 
-        public Resposta<IEnumerable<JogoDTO>> ObterJogos(int idUsuario)
+        public Resposta<IEnumerable<JogoDTO>> ObterTodosJogos(int idUsuario)
         {
             var jogos = RepositorioJogo.ObterJogos(idUsuario);
+            RespostaListaDTO.AdicionarConteudo(jogos);
+            return RespostaListaDTO;
+        }
+
+        public Resposta<IEnumerable<JogoDTO>> ObterJogosFuturos(int idUsuario)
+        {
+            var jogos = RepositorioJogo.ObterJogos(idUsuario).Where(j => j.DataHora.Date > DateTime.Now.AddDays(1));
             RespostaListaDTO.AdicionarConteudo(jogos);
             return RespostaListaDTO;
         }

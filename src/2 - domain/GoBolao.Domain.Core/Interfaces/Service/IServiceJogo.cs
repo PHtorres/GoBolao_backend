@@ -13,6 +13,7 @@ namespace GoBolao.Domain.Core.Interfaces.Service
         Resposta<Jogo> FinalizarJogo(FinalizarJogoDTO finalizarJogoDTO);
         Resposta<IEnumerable<JogoDTO>> ObterJogosDeHoje(int idUsuario);
         Resposta<IEnumerable<JogoDTO>> ObterJogosDeAmanha(int idUsuario);
-        Resposta<IEnumerable<JogoDTO>> ObterJogos(int idUsuario);
+        Resposta<IEnumerable<JogoDTO>> ObterJogosFuturos(int idUsuario);
+        Resposta<IEnumerable<JogoDTO>> ObterTodosJogos(int idUsuario);
     }
 }
