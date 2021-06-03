@@ -15,5 +15,6 @@ namespace GoBolao.Domain.Core.DTO
         public string NomeImagemAvatarCampeonato { get; set; }
         public bool SouCriadorBolao { get; set; }
         public bool PaticipoBolao { get; set; }
+        public int QuantidadeSolicitacoesAbertas { get; set; }
     }
 }
