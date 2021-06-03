@@ -28,7 +28,14 @@ namespace GoBolao.Service.API.Controllers
         [HttpGet]
         public ActionResult<Resposta<IEnumerable<JogoDTO>>> Get()
         {
-            return Ok(ServicoJogo.ObterJogos(IdUsuarioAcao));
+            return Ok(ServicoJogo.ObterTodosJogos(IdUsuarioAcao));
+        }
+
+        [HttpGet]
+        [Route("futuros")]
+        public ActionResult<Resposta<IEnumerable<JogoDTO>>> GetFuturos()
+        {
+            return Ok(ServicoJogo.ObterJogosFuturos(IdUsuarioAcao));
         }
 
         [HttpGet]
