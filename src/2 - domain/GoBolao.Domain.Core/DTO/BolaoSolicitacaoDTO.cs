@@ -9,6 +9,7 @@ namespace GoBolao.Domain.Core.DTO
         public int IdSolicitacao { get; set; }
         public int IdBolao { get; set; }
         public string ApelidoUsuarioSolicitante { get; set; }
+        public string NomeImagemUsuarioSolicitante { get; set; }
         public string NomeBolao { get; set; }
         public string Status { get; set; }
     }

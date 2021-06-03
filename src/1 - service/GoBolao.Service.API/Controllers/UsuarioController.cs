@@ -48,6 +48,13 @@ namespace GoBolao.Service.API.Controllers
             return Ok(ServicoUsuario.AlterarUsuario(alterarUsuarioDTO, IdUsuarioAcao));
         }
 
+        [HttpPatch]
+        [Route("avatar")]
+        public ActionResult<Resposta<UsuarioDTO>> Patch([FromBody] AlterarNomeImagemAvatarDTO alterarNomeImagemAvatarDTO)
+        {
+            return Ok(ServicoUsuario.AlterarNomeImagemAvatar(alterarNomeImagemAvatarDTO, IdUsuarioAcao));
+        }
+
         [HttpDelete]
         public ActionResult<Resposta<UsuarioDTO>> Delete()
         {

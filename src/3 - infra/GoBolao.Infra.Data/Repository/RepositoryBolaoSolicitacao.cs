@@ -32,6 +32,7 @@ namespace GoBolao.Infra.Data.Repository
                                                     .Join(DbSetUsuario, s => s.IdUsuarioSolicitante, u => u.Id, (s, u) =>
                                                     new
                                                     {
+                                                        NomeImagemUsuarioSolicitante = u.NomeImagemAvatar,
                                                         ApelidoUsuarioSolicitante = u.Apelido,
                                                         IdBolao = s.IdBolao,
                                                         IdSolicitacao = s.Id,
@@ -40,6 +41,7 @@ namespace GoBolao.Infra.Data.Repository
                                                     .Join(DbSetBolao, x => x.IdBolao, b => b.Id, (x, b) =>
                                                     new BolaoSolicitacaoDTO
                                                     {
+                                                        NomeImagemUsuarioSolicitante = x.NomeImagemUsuarioSolicitante,
                                                         ApelidoUsuarioSolicitante = x.ApelidoUsuarioSolicitante,
                                                         IdBolao = x.IdBolao,
                                                         IdSolicitacao = x.IdSolicitacao,
