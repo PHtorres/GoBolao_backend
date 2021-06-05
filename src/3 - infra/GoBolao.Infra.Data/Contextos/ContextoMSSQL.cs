@@ -33,7 +33,7 @@ namespace GoBolao.Infra.Data.Contextos
 
         private string ObterConexaoSQL()
         {
-            return ServicoAppSettings.ConexaoMSSQL();
+            return ServicoAppSettings.PegarConexaoMSSQL();
         }
     }
 }
