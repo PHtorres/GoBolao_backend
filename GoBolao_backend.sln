@@ -21,7 +21,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoBolao.Service.API", "src\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoBolao.Infra.Criptografia", "src\3 - infra\GoBolao.Infra.Criptografia\GoBolao.Infra.Criptografia.csproj", "{355B5013-88C9-48DB-BA38-7C485202690C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoBolao.Domain.Core", "src\2 - domain\GoBolao.Domain.Core\GoBolao.Domain.Core.csproj", "{98465403-1838-483B-B030-5B51F97E67DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GoBolao.Domain.Core", "src\2 - domain\GoBolao.Domain.Core\GoBolao.Domain.Core.csproj", "{98465403-1838-483B-B030-5B51F97E67DD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GoBolao.Infra.CrossCutting.AppSettings", "src\3 - infra\GoBolao.Infra.CrossCutting.AppSettings\GoBolao.Infra.CrossCutting.AppSettings.csproj", "{92368265-6190-486F-B55A-7D4CED43CA23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -57,6 +59,10 @@ Global
 		{98465403-1838-483B-B030-5B51F97E67DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{98465403-1838-483B-B030-5B51F97E67DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{98465403-1838-483B-B030-5B51F97E67DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{92368265-6190-486F-B55A-7D4CED43CA23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{92368265-6190-486F-B55A-7D4CED43CA23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{92368265-6190-486F-B55A-7D4CED43CA23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{92368265-6190-486F-B55A-7D4CED43CA23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,6 +75,7 @@ Global
 		{041E676A-3604-4AC7-9B33-7D0BD7947AC5} = {9EF20E72-B3B7-4000-B374-89836843DCAE}
 		{355B5013-88C9-48DB-BA38-7C485202690C} = {C3A29A5D-7AA3-4F3E-804E-1EC677B5F4B3}
 		{98465403-1838-483B-B030-5B51F97E67DD} = {3608F340-3D80-4A00-A9AF-C0622973969A}
+		{92368265-6190-486F-B55A-7D4CED43CA23} = {C3A29A5D-7AA3-4F3E-804E-1EC677B5F4B3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {78667021-D764-45B6-9868-5FA3ECC5F2B4}

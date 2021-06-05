@@ -1,10 +1,18 @@
-﻿using GoBolao.Infra.Data.Mappings;
+﻿using GoBolao.Infra.Data.Interfaces;
+using GoBolao.Infra.Data.Mappings;
 using Microsoft.EntityFrameworkCore;
 
 namespace GoBolao.Infra.Data.Contextos
 {
     public class ContextoMSSQL : DbContext
     {
+        private readonly IServiceAppSettings ServicoAppSettings;
+
+        public ContextoMSSQL(IServiceAppSettings servicoAppSettings)
+        {
+            ServicoAppSettings = servicoAppSettings;
+        }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.ApplyConfiguration(new UsuarioMapping());
@@ -25,11 +33,7 @@ namespace GoBolao.Infra.Data.Contextos
 
         private string ObterConexaoSQL()
         {
-            //var servicoAppSettings = new ServiceAppSettings();
-            //return servicoAppSettings.ConexaoMSSQL();
-
-            //return "server=rgbsys.dyndns.info\\rgb2014,35460;uid=sa;database=PAULO_TESTE;pwd=chicoedson;";
-            return "Server=tcp:gobolao-server.database.windows.net,1433;Initial Catalog=gobolaodb;Persist Security Info=False;User ID=ph;Password=gtfla32!@#$;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;";
+            return ServicoAppSettings.ConexaoMSSQL();
         }
     }
 }
