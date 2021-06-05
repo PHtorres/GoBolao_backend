@@ -6,6 +6,6 @@ namespace GoBolao.Infra.Data.Interfaces
 {
     public interface IServiceAppSettings
     {
-        string ConexaoMSSQL();
+        string PegarConexaoMSSQL();
     }
 }
