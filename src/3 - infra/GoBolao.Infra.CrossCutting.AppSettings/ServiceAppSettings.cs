@@ -9,27 +9,18 @@ namespace GoBolao.Infra.CrossCutting.AppSettings
 {
     public class ServiceAppSettings : IServiceAppSettings
     {
-        private string ApplicationExeDirectory()
+        private string ConexaoMSSQL;
+        private IConfiguration Configuration;
+
+        public ServiceAppSettings(IConfiguration configuration)
         {
-            var location = System.Reflection.Assembly.GetExecutingAssembly().Location;
-            var appRoot = Path.GetDirectoryName(location);
-            return appRoot;
+            Configuration = configuration;
+            ConexaoMSSQL = Configuration["ConexaoMSSQL"];
         }
 
-        private IConfigurationRoot GetAppSettings()
+        public string PegarConexaoMSSQL()
         {
-            string applicationExeDirectory = ApplicationExeDirectory();
-
-            var builder = new ConfigurationBuilder()
-            .SetBasePath(applicationExeDirectory)
-            .AddJsonFile("appsettings.json");
-            return builder.Build();
-        }
-
-        public string ConexaoMSSQL()
-        {
-            var appSettingsJson = GetAppSettings();
-            return appSettingsJson["ConexaoMSSQL"];
+            return ConexaoMSSQL;
         }
     }
 }
