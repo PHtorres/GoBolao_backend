@@ -28,7 +28,7 @@ namespace GoBolao.Infra.Data.Repository
 
         public IEnumerable<Usuario> ObterUsuariosPorEmail(string email)
         {
-            var usuarios = DbSetUsuario.Where(item => item.Email == email).AsEnumerable();
+            var usuarios = DbSetUsuario.Where(item => item.Email == email);
             return usuarios;
         }
     }
