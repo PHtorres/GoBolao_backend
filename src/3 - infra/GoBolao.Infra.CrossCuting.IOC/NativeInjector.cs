@@ -10,7 +10,9 @@ using GoBolao.Domain.Usuarios.Interfaces.Service;
 using GoBolao.Domain.Usuarios.Rules;
 using GoBolao.Domain.Usuarios.Services;
 using GoBolao.Infra.Criptografia.Hash;
+using GoBolao.Infra.CrossCutting.AppSettings;
 using GoBolao.Infra.Data.Contextos;
+using GoBolao.Infra.Data.Interfaces;
 using GoBolao.Infra.Data.Repository;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -21,6 +23,8 @@ namespace GoBolao.Infra.CrossCuting.IOC
         public static void ResolverDependencias(IServiceCollection service)
         {
             service.AddScoped<ContextoMSSQL>();
+
+            service.AddScoped<IServiceAppSettings, ServiceAppSettings>();
 
             service.AddScoped<IRepositoryUsuario, RepositoryUsuario>();
             service.AddScoped<IRulesUsuario, RulesUsuario>();
