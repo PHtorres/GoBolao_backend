@@ -99,8 +99,9 @@ namespace GoBolao.Domain.Usuarios.Rules
 
         private void EmailDeveSerUnicoNaAlteracao(string email, int idUsuario)
         {
-            var outrosEmails = RepositorioUsuario.ObterUsuariosPorEmail(email).ToList().Where(u => u.Id != idUsuario);
-            if (outrosEmails.Any())
+            var usuariosComEsteEmail = RepositorioUsuario.ObterUsuariosPorEmail(email).ToList();
+            var outrosUsuariosComEsteEmail = usuariosComEsteEmail.Where(u => u.Id != idUsuario);
+            if (outrosUsuariosComEsteEmail.Any())
             {
                 AdicionarFalha("E-mail já em uso. Informa outro, por favor.");
             }
