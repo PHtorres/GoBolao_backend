@@ -72,6 +72,14 @@ namespace GoBolao.Domain.Core.Services
             return RespostaListaDTO;
         }
 
+        public Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesFinalizadosPorUsuarioDeUmBolao(int idUsuario, int idBolao)
+        {
+            var palpitesBolao = RepositorioPalpite.ObterPalpitesPorBolao(idBolao);
+            var palpitesUsuario = palpitesBolao.Where(p => p.IdUsuarioPalpite == idUsuario && p.Finalizado);
+            RespostaListaDTO.AdicionarConteudo(palpitesUsuario);
+            return RespostaListaDTO;
+        }
+
         public Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesPorJogoFinalizadoOuIniciadoDosAdiversarios(int idJogo, int idUsuarioAcao)
         {
             var palpitesDoJogo = RepositorioPalpite.ObterPalpitesPorJogoDTO(idJogo).Where(p => p.Finalizado == true || p.DataHoraJogo < DateTime.Now);

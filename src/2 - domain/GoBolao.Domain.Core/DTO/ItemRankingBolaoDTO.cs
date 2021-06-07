@@ -6,6 +6,7 @@ namespace GoBolao.Domain.Core.DTO
 {
     public class ItemRankingBolaoDTO
     {
+        public int IdUsuario { get; set; }
         public string ApelidoUsuario { get; set; }
         public string NomeImagemAvatarUsuario { get; set; }
         public int Pontos { get; set; }
