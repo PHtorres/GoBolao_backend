@@ -84,10 +84,16 @@ namespace GoBolao.Domain.Core.Services
 
             var palpitesChegouPerto = palpitesDoJogo
                                .Where(p =>
-                               (DiferencaDeUmApenas(finalizarJogoDTO.PlacarMandante, p.PlacarMandantePalpite) || DiferencaDeUmApenas(finalizarJogoDTO.PlacarVisitante, p.PlacarVisitantePalpite))
+                               (DiferencaDeUmApenasOuIgual(finalizarJogoDTO.PlacarMandante, p.PlacarMandantePalpite) || DiferencaDeUmApenasOuIgual(finalizarJogoDTO.PlacarVisitante, p.PlacarVisitantePalpite))
                                && !palpitesAcertosPlacar.Contains(p)
                                && !palpitesAcertosResultado.Contains(p)
                                ).ToList();
+
+
+            foreach (var palpiteJogo in palpitesDoJogo)
+            {
+                palpiteJogo.FinalizarPalpite();
+            }
 
 
             foreach (var palpiteChegouPerto in palpitesChegouPerto)
@@ -109,6 +115,7 @@ namespace GoBolao.Domain.Core.Services
                 palpiteAcertosPlacar.FinalizarPalpite();
             }
 
+            RepositorioPalpite.AtualizarLista(palpitesDoJogo);
             RepositorioPalpite.AtualizarLista(palpitesChegouPerto);
             RepositorioPalpite.AtualizarLista(palpitesAcertosResultado);
             RepositorioPalpite.AtualizarLista(palpitesAcertosPlacar);
@@ -169,7 +176,7 @@ namespace GoBolao.Domain.Core.Services
             return Resultado.Empate;
         }
 
-        private bool DiferencaDeUmApenas(int placarReal, int placarPalpite)
+        private bool DiferencaDeUmApenasOuIgual(int placarReal, int placarPalpite)
         {
 
             if(placarReal > placarPalpite)
@@ -188,7 +195,7 @@ namespace GoBolao.Domain.Core.Services
                 }
             }
 
-            return false;
+            return placarReal == placarPalpite;
         }
     }
 }
