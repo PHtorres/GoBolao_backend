@@ -20,6 +20,41 @@ namespace GoBolao.Infra.Data.Repository
             DbSetPalpite = Sql.Set<Palpite>();
         }
 
+        public IEnumerable<PalpiteDTO> ObterPalpitesPorBolao(int idBolao)
+        {
+            var query = @"SELECT
+                         p.Id,
+                         j.Id IdJogo,
+                         U.Id IdUsuarioPalpite,
+                         U.Apelido NomeUsuarioPalpite,
+                         (SELECT NOME FROM TIME T WHERE T.Id = J.IdMandante) Mandante,
+                         (SELECT NOME FROM TIME T WHERE T.Id = J.IdVisitante) Visitante,
+                         (SELECT NomeImagemAvatar FROM TIME T WHERE T.Id = J.IdMandante) NomeImagemAvatarMandante,
+                         (SELECT NomeImagemAvatar FROM TIME T WHERE T.Id = J.IdVisitante) NomeImagemAvatarVisitante,
+                         p.DataHora DataHoraPalpite,
+                         j.DataHora DataHoraJogo,
+                         p.PlacarMandantePalpite,
+                         p.PlacarVisitantePalpite,
+                         J.PlacarMandante PlacarMandanteReal,
+                         J.PlacarVisitante PlacarVisitanteReal,
+                         p.Pontos,
+                         p.Finalizado
+                         FROM
+                         PALPITE P,
+                         JOGO J,
+                         USUARIO U,
+                         BOLAO_USUARIO BU
+                         WHERE 
+                         P.IdJogo = J.Id AND
+                         P.IdUsuario = U.Id AND
+                         P.IdUsuario = BU.IdUsuario AND
+                         BU.IdBolao = @IDBOLAO
+                         ORDER BY p.DataHora DESC";
+
+            var palpites = Sql.Database.GetDbConnection().Query<PalpiteDTO>(query, new { IDBOLAO = idBolao });
+            return palpites;
+        }
+
         public IEnumerable<Palpite> ObterPalpitesPorJogo(int idJogo)
         {
             var palpites = DbSetPalpite.Where(p => p.IdJogo == idJogo);

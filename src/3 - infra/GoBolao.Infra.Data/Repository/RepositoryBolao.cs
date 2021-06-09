@@ -141,7 +141,8 @@ namespace GoBolao.Infra.Data.Repository
 
         public IEnumerable<ItemRankingBolaoDTO> ObterClassificacaoRankingBolao(int idBolao)
         {
-            var query = @"SELECT 
+            var query = @"SELECT
+                          P.IdUsuario,
                           U.Apelido ApelidoUsuario,
                           U.NomeImagemAvatar NomeImagemAvatarUsuario,
                           SUM(P.Pontos) Pontos,
