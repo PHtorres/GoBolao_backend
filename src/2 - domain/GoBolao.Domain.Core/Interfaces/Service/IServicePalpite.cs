@@ -13,6 +13,7 @@ namespace GoBolao.Domain.Core.Interfaces.Service
         Resposta<Palpite> RemoverPalpite(int idPalpite, int idUsuarioAcao);
         Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesAbertosPorUsuario(int idUsuarioAcao);
         Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesFinalizadosPorUsuario(int idUsuarioAcao);
+        Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesFinalizadosPorUsuarioDeUmBolao(int idUsuario, int idBolao);
         Resposta<IEnumerable<PalpiteDTO>> ObterPalpitesPorJogoFinalizadoOuIniciadoDosAdiversarios(int idJogo, int idUsuarioAcao);
     }
 }
