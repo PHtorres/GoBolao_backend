@@ -105,7 +105,7 @@ namespace GoBolao.Domain.Core.Services
 
             foreach (var palpiteAcertosResultado in palpitesAcertosResultado)
             {
-                palpiteAcertosResultado.AlterarPontos(3);
+                palpiteAcertosResultado.AlterarPontos(4);
                 palpiteAcertosResultado.FinalizarPalpite();
             }
 
