@@ -1,4 +1,5 @@
 ﻿using GoBolao.Domain.Shared.Interfaces.Rules;
+using GoBolao.Domain.Shared.Interfaces.Service;
 using GoBolao.Domain.Shared.Rules;
 using GoBolao.Domain.Usuarios.DTO;
 using GoBolao.Domain.Usuarios.Interfaces.Repository;
@@ -13,10 +14,12 @@ namespace GoBolao.Domain.Usuarios.Rules
     public class RulesUsuario : RulesBase, IRulesUsuario
     {
         private readonly IRepositoryUsuario RepositorioUsuario;
+        private readonly IServiceCriptografia ServicoCriptografia;
 
-        public RulesUsuario(IRepositoryUsuario repositorioUsuario)
+        public RulesUsuario(IRepositoryUsuario repositorioUsuario, IServiceCriptografia servicoCriptografia)
         {
             RepositorioUsuario = repositorioUsuario;
+            ServicoCriptografia = servicoCriptografia;
         }
 
         public bool AptoParaAlterar(AlterarUsuarioDTO alterarUsuarioDTO, int idUsuario)
@@ -38,6 +41,14 @@ namespace GoBolao.Domain.Usuarios.Rules
         public bool AptoParaRemover(int idUsuarioRemover)
         {
             UsuarioDeveExistir(idUsuarioRemover);
+            return SemFalhas;
+        }
+
+        public bool AptoParaAlterarSenha(AlterarSenhaDTO alterarSenhaDTO, int idUsuario)
+        {
+            UsuarioDeveExistir(idUsuario);
+            SenhaAtualUsuarioDeveSerValida(idUsuario, alterarSenhaDTO.SenhaAtual);
+            SenhaDeveSerConfirmada(alterarSenhaDTO.NovaSenha, alterarSenhaDTO.ConfirmaSenha);
             return SemFalhas;
         }
 
@@ -104,6 +115,15 @@ namespace GoBolao.Domain.Usuarios.Rules
             if (outrosUsuariosComEsteEmail.Any())
             {
                 AdicionarFalha("E-mail já em uso. Informa outro, por favor.");
+            }
+        }
+
+        private void SenhaAtualUsuarioDeveSerValida(int idUsuario, string senha)
+        {
+            var usuario = RepositorioUsuario.Obter(idUsuario);
+            if(!ServicoCriptografia.ConfereCriptografia(senha, usuario.Senha))
+            {
+                AdicionarFalha("Senha atual está inválida.");
             }
         }
     }

@@ -14,5 +14,6 @@ namespace GoBolao.Domain.Usuarios.Interfaces.Service
         Resposta<UsuarioDTO> RemoverUsuario(int IdUsuarioAcao);
         Resposta<IEnumerable<UsuarioDTO>> ObterUsuarios();
         Resposta<UsuarioDTO> AlterarNomeImagemAvatar(AlterarNomeImagemAvatarDTO alterarNomeImagemAvatarDTO, int idUsuarioAcao);
+        Resposta<UsuarioDTO> AlterarSenha(AlterarSenhaDTO alterarSenhaDTO, int idUsuarioAcao);
     }
 }

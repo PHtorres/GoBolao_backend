@@ -140,5 +140,29 @@ namespace GoBolao.Domain.Usuarios.Services
             Resposta.AdicionarConteudo(usuario.UsuarioParaDTO());
             return Resposta;
         }
+
+        public Resposta<UsuarioDTO> AlterarSenha(AlterarSenhaDTO alterarSenhaDTO, int idUsuarioAcao)
+        {
+            if(!RulesUsuario.AptoParaAlterarSenha(alterarSenhaDTO, idUsuarioAcao))
+            {
+                Resposta.AdicionarNotificacao(RulesUsuario.ObterFalhas());
+                return Resposta;
+            }
+
+            var usuario = RepositorioUsuario.Obter(idUsuarioAcao);
+            usuario.AlterarSenha(alterarSenhaDTO.NovaSenha);
+            if (!usuario.Valido)
+            {
+                Resposta.AdicionarNotificacao(usuario._Erros);
+                return Resposta;
+            }
+
+            usuario.AlterarSenha(Criptografia.Criptografar(alterarSenhaDTO.NovaSenha));
+            RepositorioUsuario.Atualizar(usuario);
+            RepositorioUsuario.Salvar();
+
+            Resposta.AdicionarConteudo(usuario.UsuarioParaDTO());
+            return Resposta;
+        }
     }
 }
