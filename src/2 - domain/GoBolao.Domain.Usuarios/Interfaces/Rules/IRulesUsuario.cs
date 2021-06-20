@@ -11,5 +11,6 @@ namespace GoBolao.Domain.Usuarios.Interfaces.Rules
         bool AptoParaCriar(CriarUsuarioDTO criarUsuarioDTO);
         bool AptoParaAlterar(AlterarUsuarioDTO alterarUsuarioDTO, int idUsuario);
         bool AptoParaRemover(int idUsuarioRemover);
+        bool AptoParaAlterarSenha(AlterarSenhaDTO alterarSenhaDTO, int idUsuario);
     }
 }
