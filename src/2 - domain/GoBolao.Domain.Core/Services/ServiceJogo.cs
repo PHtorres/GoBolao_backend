@@ -71,54 +71,24 @@ namespace GoBolao.Domain.Core.Services
 
             var palpitesDoJogo = RepositorioPalpite.ObterPalpitesPorJogo(finalizarJogoDTO.IdJogo);
 
-            var palpitesAcertosPlacar = palpitesDoJogo
-                            .Where(p =>
-                            p.PlacarMandantePalpite == finalizarJogoDTO.PlacarMandante && p.PlacarVisitantePalpite == finalizarJogoDTO.PlacarVisitante
-                            ).ToList();
 
-            var palpitesAcertosResultado = palpitesDoJogo
-                                           .Where(p =>
-                                           ResultadoPorPlacares(p.PlacarMandantePalpite, p.PlacarVisitantePalpite) == ResultadoPorPlacares(finalizarJogoDTO.PlacarMandante, finalizarJogoDTO.PlacarVisitante)
-                                           && !palpitesAcertosPlacar.Contains(p)
-                                           ).ToList();
-
-            var palpitesChegouPerto = palpitesDoJogo
-                               .Where(p =>
-                               (DiferencaDeUmApenasOuIgual(finalizarJogoDTO.PlacarMandante, p.PlacarMandantePalpite) || DiferencaDeUmApenasOuIgual(finalizarJogoDTO.PlacarVisitante, p.PlacarVisitantePalpite))
-                               && !palpitesAcertosPlacar.Contains(p)
-                               && !palpitesAcertosResultado.Contains(p)
-                               ).ToList();
-
-
-            foreach (var palpiteJogo in palpitesDoJogo)
+            foreach (var palpite in palpitesDoJogo)
             {
-                palpiteJogo.FinalizarPalpite();
-            }
+                palpite.AlterarPontos(0);
+                var acertouNumeroDeGolsDoMandante = palpite.PlacarMandantePalpite == finalizarJogoDTO.PlacarMandante;
+                var acertouNumeroDeGolsDoVisitante = palpite.PlacarVisitantePalpite == finalizarJogoDTO.PlacarVisitante;
+                var acertouDiferencaGolsPlacar = DiferencaGolsPlacar(palpite.PlacarMandantePalpite, palpite.PlacarVisitantePalpite) == DiferencaGolsPlacar(finalizarJogoDTO.PlacarMandante, finalizarJogoDTO.PlacarVisitante);
+                var acertouResultado = ResultadoPorPlacares(palpite.PlacarMandantePalpite, palpite.PlacarVisitantePalpite) == ResultadoPorPlacares(finalizarJogoDTO.PlacarMandante, finalizarJogoDTO.PlacarVisitante);
 
+                if (acertouNumeroDeGolsDoMandante) palpite.AcrescentarPontos(2);
+                if (acertouNumeroDeGolsDoVisitante) palpite.AcrescentarPontos(2);
+                if (acertouDiferencaGolsPlacar) palpite.AcrescentarPontos(4);
+                if (acertouResultado) palpite.AcrescentarPontos(8);
 
-            foreach (var palpiteChegouPerto in palpitesChegouPerto)
-            {
-                palpiteChegouPerto.AlterarPontos(1);
-                palpiteChegouPerto.FinalizarPalpite();
-            }
-
-
-            foreach (var palpiteAcertosResultado in palpitesAcertosResultado)
-            {
-                palpiteAcertosResultado.AlterarPontos(4);
-                palpiteAcertosResultado.FinalizarPalpite();
-            }
-
-            foreach (var palpiteAcertosPlacar in palpitesAcertosPlacar)
-            {
-                palpiteAcertosPlacar.AlterarPontos(8);
-                palpiteAcertosPlacar.FinalizarPalpite();
+                palpite.FinalizarPalpite();
             }
 
             RepositorioPalpite.AtualizarLista(palpitesDoJogo);
-            RepositorioPalpite.AtualizarLista(palpitesChegouPerto);
-            RepositorioPalpite.AtualizarLista(palpitesAcertosResultado);
-            RepositorioPalpite.AtualizarLista(palpitesAcertosPlacar);
             RepositorioPalpite.Salvar();
 
             jogo.AlterarPlacarMandante(finalizarJogoDTO.PlacarMandante);
@@ -163,12 +133,12 @@ namespace GoBolao.Domain.Core.Services
 
         private Resultado ResultadoPorPlacares(int placarMandante, int placarVisitante)
         {
-            if(placarMandante > placarVisitante)
+            if (placarMandante > placarVisitante)
             {
                 return Resultado.VitoriaMandante;
             }
 
-            if(placarVisitante > placarMandante)
+            if (placarVisitante > placarMandante)
             {
                 return Resultado.VitoriaVisitante;
             }
@@ -176,26 +146,9 @@ namespace GoBolao.Domain.Core.Services
             return Resultado.Empate;
         }
 
-        private bool DiferencaDeUmApenasOuIgual(int placarReal, int placarPalpite)
+        private int DiferencaGolsPlacar(int placarMandante, int placarVisitante)
         {
-
-            if(placarReal > placarPalpite)
-            {
-                if((placarPalpite + 1) == placarReal)
-                {
-                    return true;
-                }
-            }
-
-            if (placarReal < placarPalpite)
-            {
-                if ((placarPalpite - 1) == placarReal)
-                {
-                    return true;
-                }
-            }
-
-            return placarReal == placarPalpite;
+            return placarMandante - placarVisitante;
         }
     }
 }
