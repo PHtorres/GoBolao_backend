@@ -81,20 +81,23 @@ namespace GoBolao.Domain.Core.Services
                 var acertouNumeroDeGolsDoVisitante = palpite.PlacarVisitantePalpite == finalizarJogoDTO.PlacarVisitante;
                 var acertouDiferencaGolsPlacar = DiferencaGolsPlacar(palpite.PlacarMandantePalpite, palpite.PlacarVisitantePalpite) == DiferencaGolsPlacar(finalizarJogoDTO.PlacarMandante, finalizarJogoDTO.PlacarVisitante);
                 var acertouResultado = resultadoPalpite == resultadoJogo;
-                var jogoFoiEmpate = resultadoJogo == Resultado.Empate;
+                //var jogoFoiEmpate = resultadoJogo == Resultado.Empate;
 
-                if (jogoFoiEmpate)
-                {
-                    if (acertouResultado) palpite.AcrescentarPontos(10);
-                    if (acertouNumeroDeGolsDoMandante && acertouNumeroDeGolsDoVisitante) palpite.AcrescentarPontos(6);
-                }
-                else
-                {
-                    if (acertouNumeroDeGolsDoMandante) palpite.AcrescentarPontos(2);
-                    if (acertouNumeroDeGolsDoVisitante) palpite.AcrescentarPontos(2);
-                    if (acertouDiferencaGolsPlacar) palpite.AcrescentarPontos(4);
-                    if (acertouResultado) palpite.AcrescentarPontos(8);
-                }
+                if (acertouNumeroDeGolsDoMandante) palpite.AcrescentarPontos(2);
+                if (acertouNumeroDeGolsDoVisitante) palpite.AcrescentarPontos(2);
+                if (acertouDiferencaGolsPlacar) palpite.AcrescentarPontos(4);
+                if (acertouResultado) palpite.AcrescentarPontos(8);
+
+                //if (jogoFoiEmpate)
+                //{
+                //    if (acertouResultado) palpite.AcrescentarPontos(10);
+                //    if (acertouNumeroDeGolsDoMandante && acertouNumeroDeGolsDoVisitante) palpite.AcrescentarPontos(6);
+                //}
+                //else
+                //{
+                //    if (acertouDiferencaGolsPlacar) palpite.AcrescentarPontos(4);
+                //    if (acertouResultado) palpite.AcrescentarPontos(8);
+                //}
 
                 palpite.FinalizarPalpite();
             }
